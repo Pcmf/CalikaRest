@@ -20,8 +20,20 @@ class DB {
         $statement->execute($params);
         
         if(explode(' ',$query)[0]=='SELECT'){
-            $data = $statement->fetchAll();
+            $data = $statement->fetchAll(PDO::FETCH_OBJ);
             return $data;
+        }
+    }
+    
+    public function queryInsert($query, $params=array()) {
+        try {
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare($query);
+            $statement->execute($params);
+            $this->pdo->commit();
+        } catch (Exception $exc) {
+            $this->pdo->rollBack();
+            return $exc;
         }
     }
 }

@@ -4,15 +4,31 @@ RewriteEngine on
 #POST do LOGIN 
 #RewriteRule ^auth/([0-9a-zA-z$./]+) restful/restful.php?url=auth&token=$1 [L,QSA]
 RewriteRule ^auth index.php?url=auth [L,QSA]
+
 RewriteRule ^users/([0-9]+) index.php?url=users&id=$1 [L,QSA]
 RewriteRule ^users index.php?url=users [L,QSA]
+
 RewriteRule ^artigos/([0-9]+) index.php?url=artigos&id=$1 [L,QSA]
 RewriteRule ^artigos index.php?url=artigos [L,QSA]
+
 RewriteRule ^clientes/([0-9]+) index.php?url=clientes&id=$1 [L,QSA]
 RewriteRule ^clientes index.php?url=clientes [L,QSA]
+
+RewriteRule ^cor/([0-9]+) index.php?url=cor&id=$1 [L,QSA]
+RewriteRule ^cor index.php?url=cor [L,QSA]
+
 RewriteRule ^cores/([0-9]+) index.php?url=cores&id=$1 [L,QSA]
 RewriteRule ^cores index.php?url=cores [L,QSA]
+
 RewriteRule ^elementos/([0-9]+) index.php?url=elementos&id=$1 [L,QSA]
 RewriteRule ^elementos index.php?url=elementos [L,QSA]
+
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2&lin=$3 [L,QSA]
 RewriteRule ^detpedcor index.php?url=detpedcor [L,QSA]
+
+RewriteRule ^modelo/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&mid=$2&ano=$3 [L,QSA]
+RewriteRule ^modelo/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&ano=$2 [L,QSA]
+RewriteRule ^modelo index.php?url=modelo [L,QSA]
+
+RewriteRule ^pedido/([0-9]+)/([0-9]+) index.php?url=pedido&pid=$1&ano=$2 [L,QSA]
+RewriteRule ^pedido index.php?url=pedido [L,QSA]

@@ -25,5 +25,15 @@ class Elemento {
      */
     public function getOne($id) {
         return $this->db->query("SELECT * FROM elemento WHERE id=:id", array(':id'=>$id));
-    }    
+    } 
+    
+    public function insert($obj) {
+        return $this->db->query("INSERT INTO elemento(nome, descricao) VALUES(:nome,:descricao)", 
+                array(':nome'=>$obj->nome, ':descricao'=>$obj->descricao));
+    }
+    
+    public function update($id,$obj) {
+        return $this->db->query("UPDATE elemento SET nome=:nome, descricao=:descricao WHERE id=:id ", 
+                array(':nome'=>$obj->nome, ':descricao'=>$obj->descricao, ':id'=>$id ));
+    }
 }
