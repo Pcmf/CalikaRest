@@ -13,6 +13,11 @@ class User {
     public function __construct() {
         $this->db = new DB();
     }
+    
+    public function checkToken($token) {
+        return $this->db->query("SELECT count(*) AS result FROM users WHERE token=:token ", [':token'=>$token])[0];
+    }
+    
     /**
      * 
      * @param type $username
@@ -23,10 +28,11 @@ class User {
         $resp = $this->db->query("SELECT * FROM users WHERE username=:user", array(':user' => $username));
         //verificar se a password e utilizador correspondem
         foreach ($resp AS $r){
-            if($r['pass'] === $pass){
+            if($r->password == $pass){
     //        if (passwordHash::check_password($r['SENHA'], $pass)) { }
                 //retorna o token com a indicação change=false (não obriga a alterar a password)
                 return $this->generateToken($r);
+            //    return '{"token": "'.$this->generateToken($r).'"}';
             }
         }
         return false;
@@ -67,8 +73,8 @@ class User {
 
         //Dados 
         $payload = [
-            'iss' => 'WINES',
-            'nome' => $resp['nome'],
+            'iss' => 'CALIKA',
+            'nome' => $resp->nome,
         ];
 
         $payload = json_encode($payload);
@@ -79,7 +85,8 @@ class User {
         $signature = hash_hmac('sha256', "$header.$payload", $key,true);
         $signature = base64_encode($signature);
        // echo $header.$payload.$signature;
+       $this->db->query("UPDATE users SET token=:token WHERE id=:id", [':token'=>$header.$payload.$signature, ':id'=>$resp->id]);
 
-        echo "$header.$payload.$signature";
+        return "$header.$payload.$signature";
     }
 }

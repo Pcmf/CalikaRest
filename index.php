@@ -8,6 +8,18 @@ require_once 'class/DetPedCor.php';
 require_once 'class/Modelo.php';
 require_once 'class/Pedido.php';
 
+function checkToken($token) {
+    $obj = new User();
+    return !$obj->checkToken($token)->result;
+}
+
+
+$headers =apache_request_headers();
+if($_GET['url'] != "auth" && checkToken($headers['token'])){
+    http_response_code(401);
+} else {
+
+
 //POSTS
 if  ($_SERVER['REQUEST_METHOD'] == "POST") {
         $postBody = file_get_contents("php://input");
@@ -15,7 +27,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
     //LOG IN
     if ($_GET['url'] == "auth") {
         $user = new User();
-        echo $user->checkUser($postBody->username, $postBody->pass);
+        echo json_encode($user->checkUser($postBody->username, $postBody->password));
         http_response_code(200);
    } elseif ($_GET['url']=="artigos") {
        $ob = new Artigo();
@@ -45,6 +57,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
    
 // GETS   
 } elseif ($_SERVER['REQUEST_METHOD'] == "GET") {
+    
         if ($_GET['url'] == "artigos") {
             $ob = new Artigo();
             if(isset($_GET['id'])){
@@ -147,4 +160,5 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 } else {//Fim dos metodos 
     http_response_code(405);
+}
 }
