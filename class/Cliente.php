@@ -24,7 +24,7 @@ class Cliente {
      * @return type
      */
     public function getOne($id) {
-        return $this->db->query("SELECT * FROM cliente WHERE id=:id", array(':id'=>$id));
+        return $this->db->query("SELECT * FROM cliente WHERE id=:id", array(':id'=>$id))[0];
     } 
     /**
      * 

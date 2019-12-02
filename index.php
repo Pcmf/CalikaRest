@@ -123,13 +123,17 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             http_response_code(200);
             
-        } elseif ($_GET['url'] == "pedido") {
+        } elseif ($_GET['url'] == "pedidos") {
             $ob = new Pedido();
             if(isset($_GET['ano'])) {
                 echo json_encode($ob->getOne($_GET['pid'],$_GET['ano']));
             } else {
                 echo json_encode($ob->getAll());
             }
+            http_response_code(200);
+        } elseif ($_GET['url'] == "pedidosbysts") {
+            $ob = new Pedido();
+            echo json_encode($ob->getByCltYearSts($_GET['cid'],$_GET['ano'], $_GET['status']));
             http_response_code(200);
         } 
 // PUT   

@@ -85,7 +85,7 @@ class User {
         $signature = hash_hmac('sha256', "$header.$payload", $key,true);
         $signature = base64_encode($signature);
        // echo $header.$payload.$signature;
-       $this->db->query("UPDATE users SET token=:token WHERE id=:id", [':token'=>$header.$payload.$signature, ':id'=>$resp->id]);
+       $this->db->query("UPDATE users SET token=:token WHERE id=:id", [':token'=>$header.'.'.$payload.'.'.$signature, ':id'=>$resp->id]);
 
         return "$header.$payload.$signature";
     }
