@@ -10,12 +10,12 @@ require_once 'class/Pedido.php';
 
 function checkToken($token) {
     $obj = new User();
-    return !$obj->checkToken($token)->result;
+    return $obj->checkToken($token)->result;
 }
 
 
 $headers =apache_request_headers();
-if($_GET['url'] != "auth" && checkToken($headers['token'])){
+if($_GET['url'] != "auth" && checkToken($headers['token'])==0){
     http_response_code(401);
 } else {
 
@@ -121,9 +121,14 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             } else {
                 echo json_encode($ob->getAll());
             }
+
+        } elseif ($_GET['url'] == "pedidobysts") {
+            $ob = new Pedido();
+            echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
             http_response_code(200);
             
-        } elseif ($_GET['url'] == "pedidos") {
+        }  elseif ($_GET['url'] == "pedido") {
+
             $ob = new Pedido();
             if(isset($_GET['ano'])) {
                 echo json_encode($ob->getOne($_GET['pid'],$_GET['ano']));
@@ -136,7 +141,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->getByCltYearSts($_GET['cid'],$_GET['ano'], $_GET['status']));
             http_response_code(200);
         } 
-// PUT   
+// PUT  pedidobysts
 } elseif ($_SERVER['REQUEST_METHOD'] == "PUT") {  
         $postBody = file_get_contents("php://input");
         $postBody = json_decode($postBody); 

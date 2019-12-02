@@ -15,7 +15,7 @@ class User {
     }
     
     public function checkToken($token) {
-        return $this->db->query("SELECT count(*) AS result FROM users WHERE token=:token ", [':token'=>$token])[0];
+        return $this->db->query("SELECT count(*) AS result FROM users WHERE token LIKE :token ", [':token'=>$token])[0];
     }
     
     /**

@@ -5,11 +5,11 @@ header("Access-Control-Allow-Methods: PUT, GET, POST");
 $response = array();
 $upload_dir = 'uploads/';
 $server_url = 'http://localhost/calika/img';
-if($_FILES['avatar'])
+if($_FILES['file'])
 {
-    $avatar_name = $_FILES["avatar"]["name"];
-    $avatar_tmp_name = $_FILES["avatar"]["tmp_name"];
-    $error = $_FILES["avatar"]["error"];
+    $avatar_name = $_FILES["file"]["name"];
+    $avatar_tmp_name = $_FILES["file"]["tmp_name"];
+    $error = $_FILES["file"]["error"];
     if($error[0] > 0){
         $response = array(
             "status" => "error",

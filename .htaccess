@@ -30,7 +30,10 @@ RewriteRule ^modelo/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&mid=$
 RewriteRule ^modelo/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&ano=$2 [L,QSA]
 RewriteRule ^modelo index.php?url=modelo [L,QSA]
 
-#Pedidos 
-RewriteRule ^pedidos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=pedidosbysts&cid=$1&ano=$2&status=$3 [L,QSA]
-RewriteRule ^pedidos/([0-9]+)/([0-9]+) index.php?url=pedidos&pid=$1&ano=$2 [L,QSA]
-RewriteRule ^pedidos/([0-9]+) index.php?url=pedidos&cliente=$1 [L,QSA]
+
+RewriteRule ^pedidos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=pedidobysts&cid=$1&ano=$2&status=$3 [L,QSA]
+RewriteRule ^pedidos/([0-9]+)/([0-9]+) index.php?url=pedido&pid=$1&ano=$2 [L,QSA]
+RewriteRule ^pedidos index.php?url=pedido [L,QSA]
+
+RewriteRule ^imagens upload.php?url=imagens [L,QSA]
+
