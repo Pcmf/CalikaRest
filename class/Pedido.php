@@ -33,4 +33,12 @@ class Pedido {
                 . " WHERE P.id=:pid AND P.ano=:ano",
                 array(':pid'=>$pid, ':ano'=>$ano ));
     }
+    
+    public function getByCltYearSts($cid, $ano, $status) {
+        return $this->db->query("SELECT P.*, M.refinterna "
+                . " FROM pedido P "
+                . " INNER JOIN modelo M ON M.pedido=P.id AND M.ano=P.ano "
+                . " WHERE P.clienteId=:cid AND P.ano=:ano AND P.situacao=:status GROUP BY P.tema",
+                [':cid'=>$cid, ':ano'=>$ano, ':status'=>$status]);
+    }
 }
