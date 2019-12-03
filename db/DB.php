@@ -36,4 +36,8 @@ class DB {
             return $exc;
         }
     }
+    
+    public function lastInsertId() {
+        return $this->lastId;
+    }
 }

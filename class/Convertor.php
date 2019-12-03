@@ -24,7 +24,7 @@ class Convertor {
         $result = $this->db->query("SELECT id, logo FROM cliente");
 
         foreach ($result AS $ln) {
-            $path = 'C:/Angular/CalikaBaby/src/assets/img/logos/' . $ln->logo;
+            $path = 'C:/Angular/CalikaBaby/src/assets/img/logos/'.$ln->logo;
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
@@ -37,12 +37,18 @@ class Convertor {
         $result = $this->db->query("SELECT id, imagem FROM pedido");
 
         foreach ($result AS $ln) {
-            $path = 'C:/Angular/CalikaBaby/src/assets/img/temas/' . $ln->imagem;
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $data = file_get_contents($path);
-            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-            $this->db->query("UPDATE pedido SET foto=:foto WHERE id=:id",
-                    [':foto' => $base64, ':id' => $ln->id]);
+            if($ln->imagem){
+                $path = 'C:/Angular/CalikaBaby/src/assets/img/temas/'.$ln->imagem;
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                try {
+                    $data = file_get_contents($path);
+                    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                    $this->db->query("UPDATE pedido SET foto=:foto WHERE id=:id",
+                        [':foto' => $base64, ':id' => $ln->id]);
+                } catch(Exception $error) {
+                    echo $error;
+                }
+            }
         }
     }
     
@@ -50,22 +56,32 @@ class Convertor {
         $result = $this->db->query("SELECT id, mainimg, imagens FROM modelo");
 
         foreach ($result AS $ln) {
-            $path = 'C:/Angular/CalikaBaby/src/assets/img/modelos/'.$ln->mainimg;
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $data = file_get_contents($path);
-            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-            $this->db->query("UPDATE pedido SET foto=:foto WHERE id=:id",
-                    [':foto'=>$base64, ':id'=>$ln->id]);
+            if($ln->mainimg){
+                $path = 'C:/Angular/CalikaBaby/src/assets/img/temas/'.$ln->mainimg;
+                try{
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $this->db->query("UPDATE pedido SET foto=:foto WHERE id=:id",
+                        [':foto'=>$base64, ':id'=>$ln->id]);
+                } catch(Exception $error){
+                    echo $error;
+                }
+            }
             $imagens = json_decode($ln->imagens);
             if($imagens){
                 $linha = 1;
                 foreach ($imagens as $img) {
-                    $path2 = 'C:/Angular/CalikaBaby/src/assets/img/modelos/'. $img;
+                    $path2 = 'C:/Angular/CalikaBaby/src/assets/img/modelos/'.$img;
+                    try{
                     $type2 = pathinfo($path2, PATHINFO_EXTENSION);
                     $data2 = file_get_contents($path2);
                     $base642 = 'data:image/' . $type2 . ';base64,' . base64_encode($data2);
                     $this->db->query("INSERT INTO modeloimagens(id, linha, foto) VALUES(:id, :linha, :foto) ",
                     [':foto'=>$base642, ':id'=>$ln->id, ':linha'=>$linha++ ] );
+                    } catch(Exception $e){
+                        echo $e;
+                    }
                 }
             }
         }

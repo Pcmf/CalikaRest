@@ -16,10 +16,10 @@ function checkToken($token) {
 }
 
 
-//$headers =apache_request_headers();
-//if($_GET['url'] != "auth" && checkToken($headers['token'])==0){
-//    http_response_code(401);
-//} else {
+$headers =apache_request_headers();
+if($_GET['url'] != "auth" && checkToken($headers['token'])==0){
+    http_response_code(401);
+} else {
 
 
 //POSTS
@@ -185,4 +185,4 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
 } else {//Fim dos metodos 
     http_response_code(405);
 }
-//}
+}
