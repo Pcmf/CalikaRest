@@ -3,8 +3,8 @@ header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: PUT, GET, POST");
 $response = array();
-$upload_dir = 'uploads/';
-$server_url = 'http://localhost/calika/img';
+$upload_dir = 'img/';
+$server_url = 'http://loacalhost/calikaRest';
 if($_FILES['file'])
 {
     $avatar_name = $_FILES["file"]["name"];

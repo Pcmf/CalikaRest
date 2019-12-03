@@ -37,3 +37,4 @@ RewriteRule ^pedidos index.php?url=pedido [L,QSA]
 
 RewriteRule ^imagens upload.php?url=imagens [L,QSA]
 
+RewriteRule ^conv/([0-9a-zA-Z/]+) index.php?url=conv&tabela=$1 [L,QSA]

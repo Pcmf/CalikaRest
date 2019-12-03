@@ -8,16 +8,18 @@ require_once 'class/DetPedCor.php';
 require_once 'class/Modelo.php';
 require_once 'class/Pedido.php';
 
+require_once 'class/Convertor.php';
+
 function checkToken($token) {
     $obj = new User();
     return $obj->checkToken($token)->result;
 }
 
 
-$headers =apache_request_headers();
-if($_GET['url'] != "auth" && checkToken($headers['token'])==0){
-    http_response_code(401);
-} else {
+//$headers =apache_request_headers();
+//if($_GET['url'] != "auth" && checkToken($headers['token'])==0){
+//    http_response_code(401);
+//} else {
 
 
 //POSTS
@@ -155,6 +157,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
                 http_response_code(200);
             }
             echo json_encode($resp);
+            
         } elseif ($_GET['url']=="artigos") {
             $ob = new Artigo();
             $resp = $ob->update($_GET['id'], $postBody);
@@ -164,10 +167,22 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
                 http_response_code(200);
             }
             echo json_encode($resp);
+            
+        } elseif ($_GET['url']=="conv") {
+            $ob = new Convertor();
+            if($_GET['tabela']=='cliente'){
+                echo json_encode($ob->converterClientes());
+            } elseif ($_GET['tabela']=='pedido') {
+                echo json_encode($ob->converterPedidos());
+            } elseif ($_GET['tabela']=='modelo') {
+                echo json_encode($ob->converterModelo());
+            }
+            http_response_code(200);
+    
     } else {
         http_response_code(401);
     }
 } else {//Fim dos metodos 
     http_response_code(405);
 }
-}
+//}
