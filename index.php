@@ -119,7 +119,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             if(isset($_GET['mid'])) {
                 echo json_encode($ob->getOne($_GET['pid'],$_GET['mid'],$_GET['ano']));
             } elseif(!isset($_GET['mid']) && isset ($_GET['pid'])) {
-                echo json_encode($ob->getByPedido($_GET['pid'], $_GET['ano']));
+                echo json_encode($ob->getByPedido($_GET['pid']));
             } else {
                 echo json_encode($ob->getAll());
             }

@@ -26,9 +26,9 @@ RewriteRule ^elementos index.php?url=elementos [L,QSA]
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2&lin=$3 [L,QSA]
 RewriteRule ^detpedcor index.php?url=detpedcor [L,QSA]
 
-RewriteRule ^modelo/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&mid=$2&ano=$3 [L,QSA]
-RewriteRule ^modelo/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&ano=$2 [L,QSA]
-RewriteRule ^modelo index.php?url=modelo [L,QSA]
+RewriteRule ^modelos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1&mid=$2&ano=$3 [L,QSA]
+RewriteRule ^modelos/([0-9]+)/([0-9]+) index.php?url=modelo&pid=$1 [L,QSA]
+RewriteRule ^modelos index.php?url=modelo [L,QSA]
 
 
 RewriteRule ^pedidos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=pedidobysts&cid=$1&ano=$2&status=$3 [L,QSA]

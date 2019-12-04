@@ -24,12 +24,11 @@ class Modelo {
                 . " INNER JOIN artigo A ON A.id=M.artigo ");    
     }
     
-    public function getByPedido($pid, $ano) {
-        return $this->db->query("SELECT M.*, P.tema, A.nome "
+    public function getByPedido($pid) {
+        return $this->db->query("SELECT M.*, A.nome "
                 . " FROM modelo M "
-                . " INNER JOIN pedido P ON P.id=M.pedido AND P.ano=M.ano "
                 . " INNER JOIN artigo A ON A.id=M.artigo "
-                . " WHERE P.id=:pid AND M.ano=:ano", array(':pid'=>$pid, ':ano'=>$ano) );
+                . " WHERE M.pedido=:pid", array(':pid'=>$pid) );
     }
     
     public function getOne($pid, $ano, $mid) {
