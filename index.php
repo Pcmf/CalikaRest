@@ -129,7 +129,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
             http_response_code(200);
             
-        }  elseif ($_GET['url'] == "pedido") {
+        }  elseif ($_GET['url'] == "pedidos") {
 
             $ob = new Pedido();
             if(isset($_GET['ano'])) {
@@ -143,6 +143,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->getByCltYearSts($_GET['cid'],$_GET['ano'], $_GET['status']));
             http_response_code(200);
         } 
+        
 // PUT  pedidobysts
 } elseif ($_SERVER['REQUEST_METHOD'] == "PUT") {  
         $postBody = file_get_contents("php://input");
@@ -167,6 +168,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
                 http_response_code(200);
             }
             echo json_encode($resp);
+            
+        } elseif ($_GET['url']=="pedidos") {
+            $ob = new Pedido();
+            echo json_encode($ob->createPedido($_GET['cid'], $postBody));
+            http_response_code(200);
             
         } elseif ($_GET['url']=="conv") {
             $ob = new Convertor();

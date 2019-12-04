@@ -1,5 +1,6 @@
 <?php
 require_once './db/DB.php';
+require_once 'Cliente.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,9 +14,11 @@ require_once './db/DB.php';
  */
 class Pedido {
     private $db;
+    private $Cliente;
     
     public function __construct() {
         $this->db = new DB();
+        $this->Cliente = new Cliente();
     }
     /**
      * 
@@ -51,7 +54,7 @@ class Pedido {
     public function getByCltYearSts($cid, $ano, $status) {
         return $this->db->query("SELECT P.*, M.refinterna "
                 . " FROM pedido P "
-                . " INNER JOIN modelo M ON M.pedido=P.id AND M.ano=P.ano "
+                . " LEFT JOIN modelo M ON M.pedido=P.id AND M.ano=P.ano "
                 . " WHERE P.clienteId=:cid AND P.ano=:ano AND P.situacao=:status GROUP BY P.tema",
                 [':cid'=>$cid, ':ano'=>$ano, ':status'=>$status]);
     }
@@ -64,17 +67,27 @@ class Pedido {
      */
     public function createPedido($cid, $obj) {
         !isset($obj->refcliente) ? $obj->refcliente='' : null;
+        !isset($obj->descricao) ? $obj->descricao='' : null;
         try {
-                $this->db->query("INSERT INTO pedido(clienteId, ano, refCliente, tema, foto, datapedido, situacao) "
-                        . " VALUES(:clienteId, :ano, :refCliente, :tema, :foto, NOW(), 1)",
-                            [':clienteId'=>$cid, ':ano'=>$obj->ano, ':refCliente'=>$obj->refcliente, ':tema'=>$obj->tema, ':foto'=>$foto] );
-                return $this->db->lastInsertId();
+            $this->db->queryInsert("INSERT INTO pedido(clienteId, ano, refInterna, refCliente, tema, descricao, foto, datapedido, situacao) "
+                        . " VALUES(:clienteId, :ano, :refInterna, :refCliente, :tema, :descricao, :foto, NOW(), 1)",
+                            [':clienteId'=>$cid, ':ano'=>$obj->anoTema, ':refCliente'=>$obj->refCliente, 
+                             ':refInterna'=>$this->getRefInterna($cid, $obj->anoTema),
+                             ':tema'=>$obj->tema, ':descricao'=>$obj->descricao , ':foto'=>$obj->foto]);
+            return $this->db->lastInsertId();
             
         } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+            return $exc->getTraceAsString();
         }
 
 
         
+    }
+    
+    private function getRefInterna($cid, $ano) {
+        $cliente = $this->Cliente->getOne($cid);
+        $pedidoCardinal = $this->db->query("SELECT COUNT(*)+1 AS cardinal FROM pedido WHERE ano=:ano AND clienteId=:cid",
+                [':ano'=>$ano, ':cid'=>$cid]);
+        return $cliente->codigo.($ano-2000).$pedidoCardinal[0]->cardinal;
     }
 }

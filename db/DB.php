@@ -7,6 +7,7 @@ require_once 'configs.php';
  */
 class DB {
     private $pdo;
+    private $lastId;
     
     public function __construct() {
         $pdo = new PDO('mysql:host='.host.';dbname='.database.';charset=utf8',username,password);
@@ -30,11 +31,14 @@ class DB {
             $this->pdo->beginTransaction();
             $statement = $this->pdo->prepare($query);
             $statement->execute($params);
+            $this->lastId = $this->pdo->lastInsertId();
             $this->pdo->commit();
+            
         } catch (Exception $exc) {
             $this->pdo->rollBack();
             return $exc;
         }
+        
     }
     
     public function lastInsertId() {
