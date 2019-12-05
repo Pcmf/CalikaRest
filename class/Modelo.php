@@ -27,8 +27,8 @@ class Modelo {
     public function getByPedido($pid) {
         return $this->db->query("SELECT M.*, A.nome "
                 . " FROM modelo M "
-                . " INNER JOIN artigo A ON A.id=M.artigo "
-                . " WHERE M.pedido=:pid", array(':pid'=>$pid) );
+                . " LEFT JOIN artigo A ON A.id=M.artigo "
+                . " WHERE M.pedido=:pid", array(':pid'=>$pid));
     }
     
     public function getOne($pid, $ano, $mid) {

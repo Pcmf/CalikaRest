@@ -36,13 +36,13 @@ class Pedido {
      * @param type $ano
      * @return type
      */
-    public function getOne($pid, $ano) {
+    public function getOne($pid) {
         return $this->db->query("SELECT P.*, C.nome AS nomeCliente, S.situacao AS nomeSituacao "
                 . " FROM pedido P"
                 . " INNER JOIN cliente C ON C.id=P.clienteId "
                 . " INNER JOIN situacao S ON S.id=P.situacao"
-                . " WHERE P.id=:pid AND P.ano=:ano",
-                array(':pid'=>$pid, ':ano'=>$ano ));
+                . " WHERE P.id=:pid",
+                array(':pid'=>$pid))[0];
     }
     /**
      * 

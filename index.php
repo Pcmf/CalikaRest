@@ -118,26 +118,20 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             $ob = new Modelo();
             if(isset($_GET['mid'])) {
                 echo json_encode($ob->getOne($_GET['pid'],$_GET['mid'],$_GET['ano']));
-            } elseif(!isset($_GET['mid']) && isset ($_GET['pid'])) {
-                echo json_encode($ob->getByPedido($_GET['pid']));
             } else {
-                echo json_encode($ob->getAll());
+                echo json_encode($ob->getByPedido($_GET['pid']));
             }
-
+            http_response_code(200);
         } elseif ($_GET['url'] == "pedidobysts") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
+            http_response_code(200);           
+            
+        }  elseif ($_GET['url'] == "pedido") {
+            $ob = new Pedido();
+            echo json_encode($ob->getOne($_GET['pid']));
             http_response_code(200);
             
-        }  elseif ($_GET['url'] == "pedidos") {
-
-            $ob = new Pedido();
-            if(isset($_GET['ano'])) {
-                echo json_encode($ob->getOne($_GET['pid'],$_GET['ano']));
-            } else {
-                echo json_encode($ob->getAll());
-            }
-            http_response_code(200);
         } elseif ($_GET['url'] == "pedidosbysts") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'],$_GET['ano'], $_GET['status']));
