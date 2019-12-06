@@ -20,6 +20,9 @@ RewriteRule ^cor index.php?url=cor [L,QSA]
 RewriteRule ^cores/([0-9]+) index.php?url=cores&id=$1 [L,QSA]
 RewriteRule ^cores index.php?url=cores [L,QSA]
 
+RewriteRule ^escalas/([0-9]+) index.php?url=escalas&id=$1 [L,QSA]
+RewriteRule ^escalas index.php?url=escalas [L,QSA]
+
 RewriteRule ^elementos/([0-9]+) index.php?url=elementos&id=$1 [L,QSA]
 RewriteRule ^elementos index.php?url=elementos [L,QSA]
 

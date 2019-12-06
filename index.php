@@ -4,6 +4,7 @@ require_once 'class/Artigo.php';
 require_once 'class/Cliente.php';
 require_once 'class/Cor.php';
 require_once 'class/Elemento.php';
+require_once 'class/Escala.php';
 require_once 'class/DetPedCor.php';
 require_once 'class/Modelo.php';
 require_once 'class/Pedido.php';
@@ -50,7 +51,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
            echo json_encode($resp);
             http_response_code(200);
        }
-   } else {
+   } elseif($_GET['url']=="modelo"){
+       $ob = new Modelo();
+       echo json_encode($ob->insert($postBody));
+       http_response_code(200);
+    }else {
        http_response_code(500);
    
     }
@@ -98,6 +103,15 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             
         } elseif ($_GET['url'] == "elementos") {
             $ob = new Elemento();
+            if(!isset($_GET['id'])) {
+                echo json_encode($ob->getAll());
+            } else {
+                echo json_encode($ob->getOne($_GET['id']));
+            }
+            http_response_code(200);
+            
+        } elseif ($_GET['url'] == "escalas") {
+            $ob = new Escala();
             if(!isset($_GET['id'])) {
                 echo json_encode($ob->getAll());
             } else {
