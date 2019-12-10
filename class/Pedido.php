@@ -79,11 +79,24 @@ class Pedido {
         } catch (Exception $exc) {
             return $exc->getTraceAsString();
         }
-
-
+    }
+    
+    
+    public function editPedido($pid, $obj) {
+        return $this->db->query("UPDATE pedido SET clienteId=:clienteId, ano=:ano, refInterna=:refInterna,"
+                . "refCliente=:refCliente, tema=:tema, descricao=:descricao, foto=:foto WHERE id=:pid",
+                [':clienteId'=>$obj->clienteId, ':ano'=>$obj->ano, ':refInterna'=>$obj->refInterna, 
+                 ':refCliente'=>$obj->refCliente, ':tema'=>$obj->tema, ':descricao'=>$obj->descricao,
+                 ':foto'=>$obj->foto, ':pid'=>$pid]);
         
     }
     
+    /**
+     * 
+     * @param type $cid
+     * @param type $ano
+     * @return type
+     */
     private function getRefInterna($cid, $ano) {
         $cliente = $this->Cliente->getOne($cid);
         $pedidoCardinal = $this->db->query("SELECT COUNT(*)+1 AS cardinal FROM pedido WHERE ano=:ano AND clienteId=:cid",

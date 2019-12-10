@@ -182,6 +182,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->createPedido($_GET['cid'], $postBody));
             http_response_code(200);
             
+        } elseif ($_GET['url']=="pedido") {
+            $ob = new Pedido();
+            echo json_encode($ob->editPedido($_GET['pid'], $postBody));
+            http_response_code(200);
+            
         } elseif ($_GET['url']=="conv") {
             $ob = new Convertor();
             if($_GET['tabela']=='cliente'){
