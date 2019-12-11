@@ -36,13 +36,13 @@ class Pedido {
      * @param type $ano
      * @return type
      */
-    public function getOne($pid, $ano) {
+    public function getOne($pid) {
         return $this->db->query("SELECT P.*, C.nome AS nomeCliente, S.situacao AS nomeSituacao "
                 . " FROM pedido P"
                 . " INNER JOIN cliente C ON C.id=P.clienteId "
                 . " INNER JOIN situacao S ON S.id=P.situacao"
-                . " WHERE P.id=:pid AND P.ano=:ano",
-                array(':pid'=>$pid, ':ano'=>$ano ));
+                . " WHERE P.id=:pid",
+                array(':pid'=>$pid))[0];
     }
     /**
      * 
@@ -79,11 +79,24 @@ class Pedido {
         } catch (Exception $exc) {
             return $exc->getTraceAsString();
         }
-
-
+    }
+    
+    
+    public function editPedido($pid, $obj) {
+        return $this->db->query("UPDATE pedido SET clienteId=:clienteId, ano=:ano, refInterna=:refInterna,"
+                . "refCliente=:refCliente, tema=:tema, descricao=:descricao, foto=:foto WHERE id=:pid",
+                [':clienteId'=>$obj->clienteId, ':ano'=>$obj->ano, ':refInterna'=>$obj->refInterna, 
+                 ':refCliente'=>$obj->refCliente, ':tema'=>$obj->tema, ':descricao'=>$obj->descricao,
+                 ':foto'=>$obj->foto, ':pid'=>$pid]);
         
     }
     
+    /**
+     * 
+     * @param type $cid
+     * @param type $ano
+     * @return type
+     */
     private function getRefInterna($cid, $ano) {
         $cliente = $this->Cliente->getOne($cid);
         $pedidoCardinal = $this->db->query("SELECT COUNT(*)+1 AS cardinal FROM pedido WHERE ano=:ano AND clienteId=:cid",

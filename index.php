@@ -4,6 +4,7 @@ require_once 'class/Artigo.php';
 require_once 'class/Cliente.php';
 require_once 'class/Cor.php';
 require_once 'class/Elemento.php';
+require_once 'class/Escala.php';
 require_once 'class/DetPedCor.php';
 require_once 'class/Modelo.php';
 require_once 'class/Pedido.php';
@@ -50,7 +51,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
            echo json_encode($resp);
             http_response_code(200);
        }
-   } else {
+   } elseif($_GET['url']=="modelos"){
+       $ob = new Modelo();
+       echo json_encode($ob->insert($postBody));
+       http_response_code(200);
+    }else {
        http_response_code(500);
    
     }
@@ -105,6 +110,15 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             http_response_code(200);
             
+        } elseif ($_GET['url'] == "escalas") {
+            $ob = new Escala();
+            if(!isset($_GET['id'])) {
+                echo json_encode($ob->getAll());
+            } else {
+                echo json_encode($ob->getOne($_GET['id']));
+            }
+            http_response_code(200);
+            
         }  elseif ($_GET['url'] == "detpedcor") {
             $ob = new DetPedCor();
             if(!isset($_GET['pid'])) {
@@ -114,30 +128,24 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             http_response_code(200);
             
-        } elseif ($_GET['url'] == "modelo") {
+        } elseif ($_GET['url'] == "modelos") {
             $ob = new Modelo();
             if(isset($_GET['mid'])) {
                 echo json_encode($ob->getOne($_GET['pid'],$_GET['mid'],$_GET['ano']));
-            } elseif(!isset($_GET['mid']) && isset ($_GET['pid'])) {
-                echo json_encode($ob->getByPedido($_GET['pid']));
             } else {
-                echo json_encode($ob->getAll());
+                echo json_encode($ob->getByPedido($_GET['pid']));
             }
-
+            http_response_code(200);
         } elseif ($_GET['url'] == "pedidobysts") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
+            http_response_code(200);           
+            
+        }  elseif ($_GET['url'] == "pedido") {
+            $ob = new Pedido();
+            echo json_encode($ob->getOne($_GET['pid']));
             http_response_code(200);
             
-        }  elseif ($_GET['url'] == "pedidos") {
-
-            $ob = new Pedido();
-            if(isset($_GET['ano'])) {
-                echo json_encode($ob->getOne($_GET['pid'],$_GET['ano']));
-            } else {
-                echo json_encode($ob->getAll());
-            }
-            http_response_code(200);
         } elseif ($_GET['url'] == "pedidosbysts") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'],$_GET['ano'], $_GET['status']));
@@ -174,6 +182,16 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->createPedido($_GET['cid'], $postBody));
             http_response_code(200);
             
+        } elseif ($_GET['url']=="pedido") {
+            $ob = new Pedido();
+            echo json_encode($ob->editPedido($_GET['pid'], $postBody));
+            http_response_code(200);
+            
+        } elseif ($_GET['url']=="modelo") {
+            $ob = new Modelo();
+            echo json_encode($ob->update($_GET['id'], $postBody));
+            http_response_code(200);
+            
         } elseif ($_GET['url']=="conv") {
             $ob = new Convertor();
             if($_GET['tabela']=='cliente'){
@@ -186,7 +204,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             http_response_code(200);
     
     } else {
-        http_response_code(401);
+        http_response_code(201);
     }
 } else {//Fim dos metodos 
     http_response_code(405);
