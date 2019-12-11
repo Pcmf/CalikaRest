@@ -54,13 +54,22 @@ class Modelo {
             $result = $this->db->query("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
                 . " VALUES(:ano,:refinterna,:refcliente,:pedido,:artigo,:foto,:descricao,:preco, :escala)",
                 [':ano' => $pedido->ano, ':refinterna' => $form->refInterna, ':refcliente' => $form->refCliente,
-                    ':pedido' => $pedido->id, ':artigo' => $form->artigo->id, ':foto' => $obj->foto,
-                    ':descricao' => $form->descricao, ':preco' => $form->preco, ':escala' => $form->escala->id]);
+                    ':pedido' => $pedido->id, ':artigo' => $form->artigo, ':foto' => $obj->foto,
+                    ':descricao' => $form->descricao, ':preco' => $form->preco, ':escala' => $form->escala]);
             return $this->db->lastInsertId();
         } catch (Exception $ex) {
             return $ex;
         }
 
+    }
+    
+    
+    public function update($id, $param) {
+        $obj = $param->formulario;
+        return $this->db->query("UPDATE modelo SET refinterna=:refinterna, refcliente=:refcliente, artigo=:artigo,"
+                . " preco=:preco, escala=:escala, foto=:foto WHERE id=:id",
+                [':refinterna'=>$obj->refInterna,':refcliente'=>$obj->refCliente, ':artigo'=>$obj->artigo,
+                 ':preco'=>$obj->preco, ':escala'=>$obj->escala, ':foto'=>$param->foto, ':id'=>$id]);
     }
 
 }

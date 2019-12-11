@@ -51,7 +51,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
            echo json_encode($resp);
             http_response_code(200);
        }
-   } elseif($_GET['url']=="modelo"){
+   } elseif($_GET['url']=="modelos"){
        $ob = new Modelo();
        echo json_encode($ob->insert($postBody));
        http_response_code(200);
@@ -128,7 +128,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             http_response_code(200);
             
-        } elseif ($_GET['url'] == "modelo") {
+        } elseif ($_GET['url'] == "modelos") {
             $ob = new Modelo();
             if(isset($_GET['mid'])) {
                 echo json_encode($ob->getOne($_GET['pid'],$_GET['mid'],$_GET['ano']));
@@ -187,6 +187,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->editPedido($_GET['pid'], $postBody));
             http_response_code(200);
             
+        } elseif ($_GET['url']=="modelo") {
+            $ob = new Modelo();
+            echo json_encode($ob->update($_GET['id'], $postBody));
+            http_response_code(200);
+            
         } elseif ($_GET['url']=="conv") {
             $ob = new Convertor();
             if($_GET['tabela']=='cliente'){
@@ -199,7 +204,7 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             http_response_code(200);
     
     } else {
-        http_response_code(401);
+        http_response_code(201);
     }
 } else {//Fim dos metodos 
     http_response_code(405);
