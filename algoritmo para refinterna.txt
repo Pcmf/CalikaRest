@@ -1,0 +1,9 @@
+Algoritmo para gerar refInternas
+
+Para cada pedido é gerado uma referencia a partir do codigo do cliente e do ano mais 000
+
+exemplo: 618-19000
+
+Para cada modelo de um pedido é atribuido uma refInterna no seguinte formato
+
+é incrementado uma unidade á segunda parte da refInterna do ultimo modelo desse pedido. Se for o primeiro começa por 1. 

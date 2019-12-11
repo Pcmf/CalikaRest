@@ -44,4 +44,18 @@ class DB {
     public function lastInsertId() {
         return $this->lastId;
     }
+    
+    public function queryDelete($query,$params=array()) {
+//        try {
+//            $this->pdo->beginTransaction();
+            
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute($params);
+//            $this->pdo->commit();
+            
+//        } catch (Exception $exc) {
+//            $this->pdo->rollBack();
+//            return $exc->getTraceAsString();
+//        }
+    }
 }

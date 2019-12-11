@@ -55,7 +55,12 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
        $ob = new Modelo();
        echo json_encode($ob->insert($postBody));
        http_response_code(200);
-    }else {
+       
+    } elseif($_GET['url']=="mfotos"){
+       $ob = new Modelo();
+       echo json_encode($ob->saveFotoByModelo($_GET['mid'], $postBody->foto));
+       http_response_code(200);
+    } else {
        http_response_code(500);
    
     }
@@ -150,6 +155,18 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'],$_GET['ano'], $_GET['status']));
             http_response_code(200);
+        } elseif ($_GET['url'] == "ref") {
+            $ob = new Modelo();
+            echo json_encode($ob->getRefInterna($_GET['pid']));
+            http_response_code(200);
+        } elseif ($_GET['url'] == "mfotos") {
+            $ob = new Modelo();
+            if(isset($_GET['linha'])) {
+                echo json_encode($ob->getOneFotoByModelo($_GET['mid'],$_GET['linha']));
+            } else {
+                echo json_encode($ob->getFotosByModelo($_GET['mid']));
+            }
+            http_response_code(200);
         } 
         
 // PUT  pedidobysts
@@ -203,9 +220,38 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             http_response_code(200);
     
+    }  elseif ($_GET['url']=="mfotos") {
+            $ob = new Modelo();
+            echo json_encode($ob->changeFotoBymodelo($_GET['mid'], $_GET['linha'] , $postBody->foto));
+            http_response_code(200);
+            
     } else {
         http_response_code(201);
     }
+    
+ // DELETE
+} elseif ($_SERVER['REQUEST_METHOD'] == "DELETE") {
+    
+    if($_GET['url']=="modelos"){
+        $ob = new Modelo();
+        echo json_encode($ob->deleteAll($_GET['pid']));
+        http_response_code(200);
+        
+    } elseif ($_GET['url']=="modelo") {
+        $ob = new Modelo();
+        echo json_encode($ob->deleteOne($_GET['id']));
+        http_response_code(200);
+        
+    } elseif ($_GET['url']=="mfotos") {
+        $ob = new Modelo();
+        if(isset($_GET['linha'])) {
+            echo json_encode($ob->deleteOneFoto($_GET['mid'], $_GET['linha']));
+        } else {
+            echo json_encode($ob->deleteAllFotos($_GET['mid']));
+        }
+        http_response_code(200);
+    }
+    
 } else {//Fim dos metodos 
     http_response_code(405);
 }

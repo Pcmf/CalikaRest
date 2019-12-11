@@ -91,6 +91,8 @@ class Pedido {
         
     }
     
+    
+    
     /**
      * 
      * @param type $cid
@@ -101,6 +103,11 @@ class Pedido {
         $cliente = $this->Cliente->getOne($cid);
         $pedidoCardinal = $this->db->query("SELECT COUNT(*)+1 AS cardinal FROM pedido WHERE ano=:ano AND clienteId=:cid",
                 [':ano'=>$ano, ':cid'=>$cid]);
-        return $cliente->codigo.($ano-2000).$pedidoCardinal[0]->cardinal;
+        if($pedidoCardinal[0]->cardinal){
+            return $cliente->codigo.($ano-2000). substr(($pedidoCardinal[0]->cardinal+1000), -3);    
+        } else {
+            return $cliente->codigo.($ano-2000).'000';
+        }
+        
     }
 }
