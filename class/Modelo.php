@@ -209,9 +209,11 @@ class Modelo {
         public function getRefInterna($pid) {
             $result = $this->db->query("SELECT id, refInterna FROM modelo WHERE pedido=:pid ORDER BY id DESC LIMIT 1", [':pid'=>$pid]);
             if($result){
-                return $result;
+                return substr($result[0]->refInterna, 0, strlen($result[0]->refInterna)-3)
+                        .substr(((intval(substr($result[0]->refInterna, -3)))+1)+1000, -3);
             } else {
-                 return  $result = $this->db->query("SELECT refInterna FROM pedido WHERE id=:pid", [':pid'=>$pid]);
+                 $result = $this->db->query("SELECT refInterna FROM pedido WHERE id=:pid", [':pid'=>$pid]);
+                 return $result[0]->refInterna;
             }
         }
             

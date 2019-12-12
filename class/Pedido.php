@@ -99,12 +99,12 @@ class Pedido {
      * @param type $ano
      * @return type
      */
-    private function getRefInterna($cid, $ano) {
+    public function getRefInterna($cid, $ano) {
         $cliente = $this->Cliente->getOne($cid);
         $pedidoCardinal = $this->db->query("SELECT COUNT(*)+1 AS cardinal FROM pedido WHERE ano=:ano AND clienteId=:cid",
                 [':ano'=>$ano, ':cid'=>$cid]);
         if($pedidoCardinal[0]->cardinal){
-            return $cliente->codigo.($ano-2000). substr(($pedidoCardinal[0]->cardinal+1000), -3);    
+            return $cliente->codigo.($ano-2000).substr(($pedidoCardinal[0]->cardinal+1000), -3);    
         } else {
             return $cliente->codigo.($ano-2000).'000';
         }

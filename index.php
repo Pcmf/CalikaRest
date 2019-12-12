@@ -146,6 +146,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
             http_response_code(200);           
             
+        }  elseif ($_GET['url'] == "pedidoref") {
+            $ob = new Pedido();
+            echo json_encode($ob->getRefInterna($_GET['cid'], $_GET['ano']));
+            http_response_code(200);
+            
         }  elseif ($_GET['url'] == "pedido") {
             $ob = new Pedido();
             echo json_encode($ob->getOne($_GET['pid']));
