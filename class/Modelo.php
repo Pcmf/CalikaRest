@@ -70,7 +70,7 @@ class Modelo {
         !isset($form->descricao) ? $form->descricao = '' : null;
         !isset($form->preco) ? $form->preco = 0 : null;
         try{
-            $result = $this->db->query("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
+            $result = $this->db->queryInsert("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
                 . " VALUES(:ano,:refinterna,:refcliente,:pedido,:artigo,:foto,:descricao,:preco, :escala)",
                 [':ano' => $pedido->ano, ':refinterna' => $form->refInterna, ':refcliente' => $form->refCliente,
                     ':pedido' => $pedido->id, ':artigo' => $form->artigo, ':foto' => $obj->foto,
@@ -79,7 +79,7 @@ class Modelo {
         } catch (Exception $ex) {
             return $ex;
         }
-
+        
     }
     
     /**
@@ -147,14 +147,19 @@ class Modelo {
      * @param type $foto
      * @return type
      */
-    public function saveFotoByModelo($mid, $foto) {
-        try {
-            $this->db->queryInsert("INSERT INTO modeloimagens(id, linha, foto) "
-                    . " VALUES(:id, (SELECT MAX(A.linha)+1 FROM modelosimagens A WHERE id=:mid), :foto)",
-                    [':mid'=>$mid, ':foto'=>$foto]);
-            return $this->db->lastInsertId();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+    public function saveFotoByModelo($mid, $fotos) {
+        foreach ($fotos AS $foto){
+            try {
+
+                $result =$this->db->query("SELECT MAX(A.linha)+1 AS linha FROM modeloimagens A WHERE id=:mid",[':mid'=>$mid]);
+                $result[0]->linha ? $linha = $result[0]->linha : $linha=1;
+                $this->db->queryInsert("INSERT INTO modeloimagens(id, linha, foto) "
+                        . " VALUES(:mid, :linha, :foto)",
+                        [':mid'=>$mid, ':linha'=>$linha, ':foto'=>$foto]);
+
+            } catch (Exception $exc) {
+                return $exc->getTraceAsString();
+            }
         }
     }
     /**

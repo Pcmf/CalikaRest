@@ -56,10 +56,6 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
        echo json_encode($ob->insert($postBody));
        http_response_code(200);
        
-    } elseif($_GET['url']=="mfotos"){
-       $ob = new Modelo();
-       echo json_encode($ob->saveFotoByModelo($_GET['mid'], $postBody->foto));
-       http_response_code(200);
     } else {
        http_response_code(500);
    
@@ -227,9 +223,13 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
     
     }  elseif ($_GET['url']=="mfotos") {
             $ob = new Modelo();
-            echo json_encode($ob->changeFotoBymodelo($_GET['mid'], $_GET['linha'] , $postBody->foto));
+            if(isset($_GET['linha'])){
+                echo json_encode($ob->changeFotoBymodelo($_GET['mid'], $_GET['linha'] , $postBody));
+            } else {
+                echo json_encode($ob->saveFotoByModelo($_GET['mid'], $postBody));
+            }
             http_response_code(200);
-            
+
     } else {
         http_response_code(201);
     }
