@@ -237,7 +237,12 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
  // DELETE
 } elseif ($_SERVER['REQUEST_METHOD'] == "DELETE") {
     
-    if($_GET['url']=="modelos"){
+    if($_GET['url']=="pedido"){
+        $ob = new Pedido();
+        echo json_encode($ob->deletePedido($_GET['pid']));
+        http_response_code(200);
+        
+    } elseif($_GET['url']=="modelos"){
         $ob = new Modelo();
         echo json_encode($ob->deleteAll($_GET['pid']));
         http_response_code(200);

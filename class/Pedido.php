@@ -1,6 +1,7 @@
 <?php
 require_once './db/DB.php';
 require_once 'Cliente.php';
+require_once 'Modelo.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,10 +16,13 @@ require_once 'Cliente.php';
 class Pedido {
     private $db;
     private $Cliente;
+    private $Modelo;
     
     public function __construct() {
         $this->db = new DB();
         $this->Cliente = new Cliente();
+        $this->Modelo = new Modelo();
+        
     }
     /**
      * 
@@ -88,6 +92,13 @@ class Pedido {
                 [':clienteId'=>$obj->clienteId, ':ano'=>$obj->ano, ':refInterna'=>$obj->refInterna, 
                  ':refCliente'=>$obj->refCliente, ':tema'=>$obj->tema, ':descricao'=>$obj->descricao,
                  ':foto'=>$obj->foto, ':pid'=>$pid]);
+        
+    }
+    
+    public function deletePedido($pid) {
+        // APAGAR MODELOS DESTE PEDIDO
+        $this->Modelo->deleteAll($pid);
+        return $this->db->query("DELETE FROM pedido WHERE id=:pid", [':pid'=>$pid]);
         
     }
     

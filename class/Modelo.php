@@ -110,6 +110,8 @@ class Modelo {
      */
     public function deleteOne($mid) {
         try {
+            $this->deleteImagensModelos($mid);
+            $this->deleteDetPedCor($mid);
             return $this->db->query("DELETE FROM modelo WHERE id=:id", [':id'=>$mid]);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -121,7 +123,12 @@ class Modelo {
      * @return type
      */
     public function deleteAll($pid) {
+        $result = $this->db->query("SELECT id FROM modelo WHERE pedido=:pid", ['pid'=>$pid]);
+        foreach ($result as $modelo) {
+            $this->deleteImagensModelos($modelo->id);
+        }
         try {
+            // TO DO - obter os modelos de um pedido e eliminar as imagens de cada um
             return $this->db->queryDelete("DELETE FROM modelo WHERE pedido=:pid", [':pid'=>$pid]);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -129,6 +136,23 @@ class Modelo {
             
     }
     
+    private function deleteDetPedCor($mid) {
+          try {
+            $this->db->query("DELETE FROM detpedcor WHERE modelo=:mid",[':mid'=>$mid]);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }      
+    }
+    
+    private function deleteImagensModelos($mid) {
+        try {
+            $this->db->query("DELETE FROM modeloimagens WHERE id=:mid",[':mid'=>$mid]);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+
+        
+    }
     /**
      * 
      * @param type $mid
