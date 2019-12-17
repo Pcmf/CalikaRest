@@ -55,3 +55,5 @@ RewriteRule ^pedido/([0-9]+) index.php?url=pedido&pid=$1 [L,QSA]
 RewriteRule ^imagens upload.php?url=imagens [L,QSA]
 
 RewriteRule ^conv/([0-9a-zA-Z/]+) index.php?url=conv&tabela=$1 [L,QSA]
+
+RewriteRule ^ftoaprove/([0-9]+) folhas/folhaDoPedido.php?pid=$1 [L,QSA]
