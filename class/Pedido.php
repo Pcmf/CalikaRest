@@ -1,6 +1,7 @@
 <?php
 require_once './db/DB.php';
 require_once 'Cliente.php';
+require_once 'Modelo.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,10 +16,13 @@ require_once 'Cliente.php';
 class Pedido {
     private $db;
     private $Cliente;
+    private $Modelo;
     
     public function __construct() {
         $this->db = new DB();
         $this->Cliente = new Cliente();
+        $this->Modelo = new Modelo();
+        
     }
     /**
      * 
@@ -91,6 +95,13 @@ class Pedido {
         
     }
     
+    public function deletePedido($pid) {
+        // APAGAR MODELOS DESTE PEDIDO
+        $this->Modelo->deleteAll($pid);
+        return $this->db->query("DELETE FROM pedido WHERE id=:pid", [':pid'=>$pid]);
+        
+    }
+    
     
     
     /**
@@ -99,12 +110,12 @@ class Pedido {
      * @param type $ano
      * @return type
      */
-    private function getRefInterna($cid, $ano) {
+    public function getRefInterna($cid, $ano) {
         $cliente = $this->Cliente->getOne($cid);
         $pedidoCardinal = $this->db->query("SELECT COUNT(*)+1 AS cardinal FROM pedido WHERE ano=:ano AND clienteId=:cid",
                 [':ano'=>$ano, ':cid'=>$cid]);
         if($pedidoCardinal[0]->cardinal){
-            return $cliente->codigo.($ano-2000). substr(($pedidoCardinal[0]->cardinal+1000), -3);    
+            return $cliente->codigo.($ano-2000).substr(($pedidoCardinal[0]->cardinal+1000), -3);    
         } else {
             return $cliente->codigo.($ano-2000).'000';
         }

@@ -70,7 +70,7 @@ class Modelo {
         !isset($form->descricao) ? $form->descricao = '' : null;
         !isset($form->preco) ? $form->preco = 0 : null;
         try{
-            $result = $this->db->query("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
+            $result = $this->db->queryInsert("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
                 . " VALUES(:ano,:refinterna,:refcliente,:pedido,:artigo,:foto,:descricao,:preco, :escala)",
                 [':ano' => $pedido->ano, ':refinterna' => $form->refInterna, ':refcliente' => $form->refCliente,
                     ':pedido' => $pedido->id, ':artigo' => $form->artigo, ':foto' => $obj->foto,
@@ -79,7 +79,7 @@ class Modelo {
         } catch (Exception $ex) {
             return $ex;
         }
-
+        
     }
     
     /**
@@ -110,6 +110,8 @@ class Modelo {
      */
     public function deleteOne($mid) {
         try {
+            $this->deleteImagensModelos($mid);
+            $this->deleteDetPedCor($mid);
             return $this->db->query("DELETE FROM modelo WHERE id=:id", [':id'=>$mid]);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -121,7 +123,12 @@ class Modelo {
      * @return type
      */
     public function deleteAll($pid) {
+        $result = $this->db->query("SELECT id FROM modelo WHERE pedido=:pid", ['pid'=>$pid]);
+        foreach ($result as $modelo) {
+            $this->deleteImagensModelos($modelo->id);
+        }
         try {
+            // TO DO - obter os modelos de um pedido e eliminar as imagens de cada um
             return $this->db->queryDelete("DELETE FROM modelo WHERE pedido=:pid", [':pid'=>$pid]);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -129,6 +136,23 @@ class Modelo {
             
     }
     
+    private function deleteDetPedCor($mid) {
+          try {
+            $this->db->query("DELETE FROM detpedcor WHERE modelo=:mid",[':mid'=>$mid]);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }      
+    }
+    
+    private function deleteImagensModelos($mid) {
+        try {
+            $this->db->query("DELETE FROM modeloimagens WHERE id=:mid",[':mid'=>$mid]);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+
+        
+    }
     /**
      * 
      * @param type $mid
@@ -147,14 +171,19 @@ class Modelo {
      * @param type $foto
      * @return type
      */
-    public function saveFotoByModelo($mid, $foto) {
-        try {
-            $this->db->queryInsert("INSERT INTO modeloimagens(id, linha, foto) "
-                    . " VALUES(:id, (SELECT MAX(A.linha)+1 FROM modelosimagens A WHERE id=:mid), :foto)",
-                    [':mid'=>$mid, ':foto'=>$foto]);
-            return $this->db->lastInsertId();
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+    public function saveFotoByModelo($mid, $fotos) {
+        foreach ($fotos AS $foto){
+            try {
+
+                $result =$this->db->query("SELECT MAX(A.linha)+1 AS linha FROM modeloimagens A WHERE id=:mid",[':mid'=>$mid]);
+                $result[0]->linha ? $linha = $result[0]->linha : $linha=1;
+                $this->db->queryInsert("INSERT INTO modeloimagens(id, linha, foto) "
+                        . " VALUES(:mid, :linha, :foto)",
+                        [':mid'=>$mid, ':linha'=>$linha, ':foto'=>$foto]);
+
+            } catch (Exception $exc) {
+                return $exc->getTraceAsString();
+            }
         }
     }
     /**
@@ -209,9 +238,11 @@ class Modelo {
         public function getRefInterna($pid) {
             $result = $this->db->query("SELECT id, refInterna FROM modelo WHERE pedido=:pid ORDER BY id DESC LIMIT 1", [':pid'=>$pid]);
             if($result){
-                return $result;
+                return substr($result[0]->refInterna, 0, strlen($result[0]->refInterna)-3)
+                        .substr(((intval(substr($result[0]->refInterna, -3)))+1)+1000, -3);
             } else {
-                 return  $result = $this->db->query("SELECT refInterna FROM pedido WHERE id=:pid", [':pid'=>$pid]);
+                 $result = $this->db->query("SELECT refInterna FROM pedido WHERE id=:pid", [':pid'=>$pid]);
+                 return $result[0]->refInterna;
             }
         }
             
