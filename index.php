@@ -1,5 +1,6 @@
 <?php
 require_once 'class/User.php';
+require_once 'class/MyEmpresa.php';
 require_once 'class/Artigo.php';
 require_once 'class/Cliente.php';
 require_once 'class/Cor.php';
@@ -166,6 +167,10 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             } else {
                 echo json_encode($ob->getFotosByModelo($_GET['mid']));
             }
+            http_response_code(200);
+        } elseif ($_GET['url'] == "empresa") {
+            $ob = new MyEmpresa();
+            echo json_encode($ob->getAll());
             http_response_code(200);
         } 
         
