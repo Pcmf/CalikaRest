@@ -31,6 +31,9 @@ RewriteRule ^elementos index.php?url=elementos [L,QSA]
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2&lin=$3 [L,QSA]
 RewriteRule ^detpedcor index.php?url=detpedcor [L,QSA]
 
+#Dados dos modelos de um pedido incluindo todas as imagens
+RewriteRule ^modelos/allimgs/([0-9]+) index.php?url=mimgs&pid=$1 [L,QSA]
+
 RewriteRule ^modelos/ref/([0-9]+) index.php?url=ref&pid=$1 [L,QSA]
 RewriteRule ^modelos/fotos/([0-9]+)/([0-9]+) index.php?url=mfotos&mid=$1&linha=$2 [L,QSA]
 RewriteRule ^modelos/fotos/([0-9]+) index.php?url=mfotos&mid=$1 [L,QSA]

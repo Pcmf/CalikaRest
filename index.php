@@ -173,6 +173,10 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             $ob = new MyEmpresa();
             echo json_encode($ob->getAll());
             http_response_code(200);
+        } elseif ($_GET['url'] == "mimgs") {
+            $ob = new Modelo();
+            echo json_encode($ob->getMimgs($_GET['pid']));
+            http_response_code(200);
         } 
         
 // PUT  pedidobysts

@@ -88,10 +88,10 @@ class Pedido {
     
     public function editPedido($pid, $obj) {
         return $this->db->query("UPDATE pedido SET clienteId=:clienteId, ano=:ano, refInterna=:refInterna,"
-                . "refCliente=:refCliente, tema=:tema, descricao=:descricao, foto=:foto WHERE id=:pid",
+                . "refCliente=:refCliente, tema=:tema, descricao=:descricao, foto=:foto, situacao=:situacao WHERE id=:pid",
                 [':clienteId'=>$obj->clienteId, ':ano'=>$obj->ano, ':refInterna'=>$obj->refInterna, 
                  ':refCliente'=>$obj->refCliente, ':tema'=>$obj->tema, ':descricao'=>$obj->descricao,
-                 ':foto'=>$obj->foto, ':pid'=>$pid]);
+                 ':foto'=>$obj->foto, ':situacao'=>$obj->situacao , ':pid'=>$pid]);
         
     }
     

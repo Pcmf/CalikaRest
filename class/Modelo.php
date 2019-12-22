@@ -56,6 +56,25 @@ class Modelo {
                         array(':pid' => $pid, ':ano' => $ano, ':mid' => $mid));
     }
     
+    /**
+     * Obter modelos com todas as imagens
+     * @param type $pid
+     * @return array
+     */
+    public function getMimgs($pid) {
+        $modelos = array();
+        $result = $this->db->query("SELECT M.*, A.nome "
+                        . " FROM modelo M "
+                        . " LEFT JOIN artigo A ON A.id=M.artigo "
+                        . " WHERE M.pedido=:pid", array(':pid' => $pid));
+        foreach ($result as $modelo) {
+            $temp = array();
+            $temp['modelo'] = $modelo;
+            $temp['imgs'] = $this->getFotosByModelo($modelo->id);
+            array_push($modelos, $temp);
+        }
+        return $modelos;
+    }
     
     /**
      * 
