@@ -108,15 +108,21 @@ class Modelo {
      * @return type
      */
     public function update($id, $param) {
-        $obj = $param->formulario;
+        if(isset($param->formulario)) {
+            $obj = $param->formulario;
+        } else {
+            $obj = $param;
+        }
         !isset($obj->refCliente) ? $obj->refCliente="" : null;
         !isset($obj->preco) ? $obj->preco=0 : null;
         !isset($obj->foto) ? $obj->foto="": null;
+        !isset($obj->refInterna) ? $obj->refInterna="": null;
+        !isset($obj->obsinternas) ? $obj->obsinternas="": null;
         try {
             return $this->db->query("UPDATE modelo SET refinterna=:refinterna, refcliente=:refcliente, artigo=:artigo,"
-                . " preco=:preco, escala=:escala, foto=:foto WHERE id=:id",
+                . " preco=:preco, escala=:escala, foto=:foto, obsinternas=:obsinternas WHERE id=:id",
                 [':refinterna'=>$obj->refInterna,':refcliente'=>$obj->refCliente, ':artigo'=>$obj->artigo,
-                 ':preco'=>$obj->preco, ':escala'=>$obj->escala, ':foto'=>$param->foto, ':id'=>$id]);
+                 ':preco'=>$obj->preco, ':escala'=>$obj->escala, ':foto'=>$param->foto, ':obsinternas'=>$obj->obsinternas, ':id'=>$id]);
         } catch (Exception $ex) {
             return $ex;
         }

@@ -46,16 +46,16 @@ class DB {
     }
     
     public function queryDelete($query,$params=array()) {
-//        try {
-//            $this->pdo->beginTransaction();
+        try {
+            $this->pdo->beginTransaction();
             
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($params);
-//            $this->pdo->commit();
+            $this->pdo->commit();
             
-//        } catch (Exception $exc) {
-//            $this->pdo->rollBack();
-//            return $exc->getTraceAsString();
-//        }
+        } catch (Exception $exc) {
+            $this->pdo->rollBack();
+            return $exc->getTraceAsString();
+        }
     }
 }

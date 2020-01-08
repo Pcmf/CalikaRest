@@ -125,8 +125,10 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             $ob = new DetPedCor();
             if(!isset($_GET['pid'])) {
                 echo json_encode($ob->getAll());
-            } else {
+            } elseif(isset($_GET['lin'])) {
                 echo json_encode($ob->getOne($_GET['pid'], $_GET['mod'], $_GET['lin']));
+            } else {
+                echo json_encode($ob->getPidMod($_GET['pid'], $_GET['mod']));
             }
             http_response_code(200);
             
@@ -219,6 +221,12 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->update($_GET['id'], $postBody));
             http_response_code(200);
             
+        } elseif ($_GET['url']=="detpedcor") {
+            $ob = new DetPedCor();
+            if(isset($_GET['lin']))
+            echo json_encode($ob->insertLin($_GET['pid'], $_GET['mod'], $_GET['lin'], $postBody));
+            http_response_code(200);
+            
         } elseif ($_GET['url']=="conv") {
             $ob = new Convertor();
             if($_GET['tabela']=='cliente'){
@@ -269,6 +277,11 @@ if  ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo json_encode($ob->deleteAllFotos($_GET['mid']));
         }
         http_response_code(200);
+    } elseif ($_GET['url']=="detpedcor") {
+        $ob = new DetPedCor();
+        if(isset($_GET['lin'])) {
+            echo json_encode($ob->deleteLine($_GET['pid'], $_GET['mod'], $_GET['lin']));
+        }
     }
     
 } else {//Fim dos metodos 

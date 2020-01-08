@@ -16,8 +16,8 @@ RewriteRule ^artigos index.php?url=artigos [L,QSA]
 RewriteRule ^clientes/([0-9]+) index.php?url=clientes&id=$1 [L,QSA]
 RewriteRule ^clientes index.php?url=clientes [L,QSA]
 
-RewriteRule ^cor/([0-9]+) index.php?url=cor&id=$1 [L,QSA]
-RewriteRule ^cor index.php?url=cor [L,QSA]
+#RewriteRule ^cor/([0-9]+) index.php?url=cor&id=$1 [L,QSA]
+#RewriteRule ^cor index.php?url=cor [L,QSA]
 
 RewriteRule ^cores/([0-9]+) index.php?url=cores&id=$1 [L,QSA]
 RewriteRule ^cores index.php?url=cores [L,QSA]
@@ -29,6 +29,7 @@ RewriteRule ^elementos/([0-9]+) index.php?url=elementos&id=$1 [L,QSA]
 RewriteRule ^elementos index.php?url=elementos [L,QSA]
 
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2&lin=$3 [L,QSA]
+RewriteRule ^detpedcor/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2 [L,QSA]
 RewriteRule ^detpedcor index.php?url=detpedcor [L,QSA]
 
 #Dados dos modelos de um pedido incluindo todas as imagens
