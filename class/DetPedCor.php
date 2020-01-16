@@ -1,5 +1,5 @@
 <?php
-require_once './db/DB.php';
+    require_once './db/DB.php';
 /**
  * Description of DetPedCor
  *
@@ -34,7 +34,8 @@ class DetPedCor {
      * @return type
      */
     public function getPidMod($pid, $mid) {
-        $result = $this->db->query("SELECT D.*, C.nome AS cor_1, C2.nome AS cor_2 FROM detpedcor D "
+        $result = $this->db->query("SELECT D.*, C.nome AS cor_1, C2.nome AS cor_2"
+                . " FROM detpedcor D "
                 . " LEFT JOIN cor C ON D.cor1=C.id "
                 . " LEFT JOIN cor C2 ON D.cor2=C2.id "
                 . " WHERE D.pedido=:pedido AND D.modelo=:modelo", 

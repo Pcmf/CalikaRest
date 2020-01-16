@@ -32,6 +32,11 @@ RewriteRule ^detpedcor/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2 [L,QSA]
 RewriteRule ^detpedcor index.php?url=detpedcor [L,QSA]
 
+#dados do detalhe
+RewriteRule ^detalhe/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=det&pid=$1&mid=$2&lin=$3 [L,QSA]
+RewriteRule ^detalhe/([0-9]+)/([0-9]+) index.php?url=det&pid=$1&mid=$2 [L,QSA]
+RewriteRule ^detalhe/([0-9]+) index.php?url=det&pid=$1 [L,QSA]
+
 #Dados dos modelos de um pedido incluindo todas as imagens
 RewriteRule ^modelos/allimgs/([0-9]+) index.php?url=mimgs&pid=$1 [L,QSA]
 

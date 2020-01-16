@@ -1,6 +1,7 @@
 <?php
 
 require_once './db/DB.php';
+require_once 'Detalhe.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,9 +16,11 @@ require_once './db/DB.php';
 class Modelo {
 
     private $db;
+    private $Det; //DetPedCor
 
     public function __construct() {
         $this->db = new DB();
+        $this->Det = new Detalhe();
     }
     /**
      * 
@@ -71,6 +74,7 @@ class Modelo {
             $temp = array();
             $temp['modelo'] = $modelo;
             $temp['imgs'] = $this->getFotosByModelo($modelo->id);
+            $temp['dpc'] = $this->Det->getByPidMid($pid, $modelo->id);
             array_push($modelos, $temp);
         }
         return $modelos;
