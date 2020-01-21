@@ -87,6 +87,7 @@ class Pedido {
     
     
     public function editPedido($pid, $obj) {
+        $obj = $this->checkObjFields($pid, $obj);
         return $this->db->query("UPDATE pedido SET clienteId=:clienteId, ano=:ano, refInterna=:refInterna,"
                 . "refCliente=:refCliente, tema=:tema, descricao=:descricao, foto=:foto, situacao=:situacao WHERE id=:pid",
                 [':clienteId'=>$obj->clienteId, ':ano'=>$obj->ano, ':refInterna'=>$obj->refInterna, 
@@ -120,5 +121,20 @@ class Pedido {
             return $cliente->codigo.($ano-2000).'000';
         }
         
+    }
+    
+    
+    private function checkObjFields($pid, $obj){
+        $old = $this->getOne($pid);
+        !isset($obj->clienteId) ? ($old->clienteId ? $obj->clienteId = $old->clienteId : $obj->clienteId = 'NULL') :null; 
+        !isset($obj->ano) ? ($old->ano ? $obj->ano = $old->ano : $obj->ano = 'NULL') :null; 
+        !isset($obj->refInterna) ? ($old->refInterna ? $obj->refInterna = $old->refInterna : $obj->refInterna = 'NULL') :null; 
+        !isset($obj->refCliente) ? ($old->refCliente ? $obj->refCliente = $old->refCliente : $obj->refCliente = 'NULL') :null; 
+        !isset($obj->tema) ? ($old->tema ? $obj->tema = $old->tema : $obj->tema = 'NULL') :null; 
+        !isset($obj->descricao) ? ($old->descricao ? $obj->descricao = $old->descricao : $obj->descricao = 'NULL') :null; 
+        !isset($obj->foto) ? ($old->foto ? $obj->foto = $old->foto : $obj->foto = 'NULL') :null; 
+        !isset($obj->situacao) ? ($old->situacao ? $obj->situacao = $old->situacao : $obj->situacao = 'NULL') :null; 
+        
+        return $obj;
     }
 }
