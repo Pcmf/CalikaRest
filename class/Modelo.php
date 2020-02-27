@@ -32,6 +32,13 @@ class Modelo {
                         . " INNER JOIN pedido P ON P.id=M.pedido AND P.ano=M.ano "
                         . " INNER JOIN artigo A ON A.id=M.artigo ");
     }
+
+    public function getById($id) {
+        return $this->db->query("SELECT M.*, A.nome "
+                        . " FROM modelo M "
+                        . " LEFT JOIN artigo A ON A.id=M.artigo "
+                        . " WHERE M.id=:id", array(':id' => $id));
+    }
     /**
      * 
      * @param type $pid
@@ -117,11 +124,13 @@ class Modelo {
         } else {
             $obj = $param;
         }
+        !isset($obj->artigo) ? $obj->artigo="": null;
         !isset($obj->refCliente) ? $obj->refCliente="" : null;
         !isset($obj->preco) ? $obj->preco=0 : null;
         !isset($obj->foto) ? $obj->foto="": null;
         !isset($obj->refInterna) ? $obj->refInterna="": null;
         !isset($obj->obsinternas) ? $obj->obsinternas="": null;
+        !isset($obj->escala) ? $obj->escala="": null;
         try {
             return $this->db->query("UPDATE modelo SET refinterna=:refinterna, refcliente=:refcliente, artigo=:artigo,"
                 . " preco=:preco, escala=:escala, foto=:foto, obsinternas=:obsinternas WHERE id=:id",
@@ -203,9 +212,9 @@ class Modelo {
     public function saveFotoByModelo($mid, $fotos) {
         foreach ($fotos AS $foto){
             try {
-
-                $result =$this->db->query("SELECT MAX(A.linha)+1 AS linha FROM modeloimagens A WHERE id=:mid",[':mid'=>$mid]);
-                $result[0]->linha ? $linha = $result[0]->linha : $linha=1;
+//                $result =$this->db->query("SELECT MAX(A.linha)+1 AS linha FROM modeloimagens A WHERE id=:mid",[':mid'=>$mid]);
+//                $result[0]->linha ? $linha = $result[0]->linha : $linha=1;
+                $linha = $this->getFotoLinha($mid);
                 $this->db->queryInsert("INSERT INTO modeloimagens(id, linha, foto) "
                         . " VALUES(:mid, :linha, :foto)",
                         [':mid'=>$mid, ':linha'=>$linha, ':foto'=>$foto]);
@@ -274,6 +283,30 @@ class Modelo {
                  return $result[0]->refInterna;
             }
         }
-            
+        
+        
+        public function updateFoto($id, $foto){
+            return $this->db->query("UPDATE modelo SET foto=:foto WHERE id=:id", 
+                    [':id'=>$id, ':foto'=>$foto]);
+        }
+        public function updateFotoExt($id, $foto){
+            $linha = $this->getFotoLinha($id);
+            try {
+                return $this->db->query("INSERT into modeloimagens SET id=:id, linha=:linha, foto=:foto", 
+                    [':id'=>$id,':linha'=>$linha, ':foto'=>$foto]);
+            } catch (Exception $exc) {
+                echo $exc->getTraceAsString();
+            }
+
+
+        }   
+        
+        
+        private function getFotoLinha($mid){
+                $result =$this->db->query("SELECT MAX(A.linha) AS linha FROM modeloimagens A WHERE id=:mid",[':mid'=>$mid]);
+                $result[0]->linha ? $linha = $result[0]->linha +1 : $linha=1;
+                return $linha;
+        }
 
 }
+

@@ -1,6 +1,9 @@
 # Turn rewrite engine on
 RewriteEngine on
-
+# Cors
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin"
+Header always set Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
 #POST do LOGIN 
 #RewriteRule ^auth/([0-9a-zA-z$./]+) restful/restful.php?url=auth&token=$1 [L,QSA]
 RewriteRule ^auth index.php?url=auth [L,QSA]
@@ -48,6 +51,8 @@ RewriteRule ^modelos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=modelos&pid=$1&mid
 RewriteRule ^modelos/([0-9]+) index.php?url=modelos&pid=$1 [L,QSA]
 RewriteRule ^modelos index.php?url=modelos [L,QSA]
 
+RewriteRule ^modelo/foto/ext/([0-9]+) index.php?url=modFotoExt&id=$1 [L,QSA]
+RewriteRule ^modelo/foto/([0-9]+) index.php?url=modFoto&id=$1 [L,QSA]
 RewriteRule ^modelo/([0-9]+) index.php?url=modelo&id=$1 [L,QSA]
 
 

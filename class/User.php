@@ -29,7 +29,7 @@ class User {
         //verificar se a password e utilizador correspondem
         foreach ($resp AS $r){
             if($r->password == $pass){
-    //        if (passwordHash::check_password($r['SENHA'], $pass)) { }
+    //        if (passwordHash::check_password($r['SENHA'], $pass)) { 
                 //retorna o token com a indicação change=false (não obriga a alterar a password)
                 return $this->generateToken($r);
             //    return '{"token": "'.$this->generateToken($r).'"}';

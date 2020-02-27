@@ -146,6 +146,14 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
                 echo json_encode($ob->getByPedido($_GET['pid']));
             }
             http_response_code(200);
+        } elseif ($_GET['url'] == "modelo") {
+            $ob = new Modelo();
+            echo json_encode($ob->getById($_GET['id']));
+            http_response_code(200);
+        } elseif ($_GET['url'] == "pedidos") {
+            $ob = new Pedido();
+            echo json_encode($ob->getAll());
+            http_response_code(200);
         } elseif ($_GET['url'] == "pedidobysts") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
@@ -214,6 +222,14 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
         } elseif ($_GET['url'] == "pedido") {
             $ob = new Pedido();
             echo json_encode($ob->editPedido($_GET['pid'], $postBody));
+            http_response_code(200);
+        } elseif ($_GET['url'] == "modFoto") {
+            $ob = new Modelo();
+            echo json_encode($ob->updateFoto($_GET['id'], $postBody));
+            http_response_code(200);
+        } elseif ($_GET['url'] == "modFotoExt") {
+            $ob = new Modelo();
+            echo json_encode($ob->updateFotoExt($_GET['id'], $postBody));
             http_response_code(200);
         } elseif ($_GET['url'] == "modelo") {
             $ob = new Modelo();
