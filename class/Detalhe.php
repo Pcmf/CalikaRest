@@ -26,7 +26,7 @@ class Detalhe {
      */
     public function getByPidMidLin($pid, $mid, $lin){
         $result = $this->db->query("SELECT * FROM detalhe WHERE pedido=:pid AND modelo=:mid ANDlinha=:lin",
-                [':pid'=>$pid, ':mid'=>$mid, ':lin'=>lin]);
+                [':pid'=>$pid, ':mid'=>$mid, ':lin'=>$lin]);
         $result[0]->qtys = json_decode($result[0]->qtys);
     }
     /**
@@ -123,7 +123,7 @@ class Detalhe {
      * @return type
      */
     public function deleteByLine($pid, $mid, $lin) {
-        return $this->db->query("DELETE FROM detalhe WHERE pedido=:pid AND modelo=:mid AND linha=:lin ",
+        return $this->db->query("DELETE FROM detalhe WHERE pedido=:pid AND modelo=:mid AND linha=:linha ",
                 [':pid'=>$pid, ':mid'=>$mid, ':linha'=>$lin]);
     }
     /**

@@ -1,7 +1,7 @@
 <?php
     require_once './db/DB.php';
 /**
- * Description of DetPedCor
+ * Description of detalhe
  *
  * @author pedro
  */
@@ -16,15 +16,15 @@ class DetPedCor {
      * @return type
      */
     public function getAll() {
-        return $this->db->query("SELECT * FROM detpedcor");
+        return $this->db->query("SELECT * FROM detalhe");
     }
     /**
      * 
      * @param type $id
      * @return type
      */
-    public function getPidModLin($pid,$mod,$lin) {
-        return $this->db->query("SELECT * FROM detpedcor WHERE pedido=:pedido AND modelo=:modelo AND linha=:linha ", 
+    public function getPidModLin($pid,$mid,$lin) {
+        return $this->db->query("SELECT * FROM detalhe WHERE pedido=:pedido AND modelo=:modelo AND linha=:linha ", 
                 array(':pedido'=>$pid, ':modelo'=>$mid, ':linha'=>$lin));
     }
     /**
@@ -35,7 +35,7 @@ class DetPedCor {
      */
     public function getPidMod($pid, $mid) {
         $result = $this->db->query("SELECT D.*, C.nome AS cor_1, C2.nome AS cor_2"
-                . " FROM detpedcor D "
+                . " FROM detalhe D "
                 . " LEFT JOIN cor C ON D.cor1=C.id "
                 . " LEFT JOIN cor C2 ON D.cor2=C2.id "
                 . " WHERE D.pedido=:pedido AND D.modelo=:modelo", 
@@ -56,7 +56,7 @@ class DetPedCor {
      * @return type
      */
     public function getPid($pid) {
-        return $this->db->query("SELECT * FROM detpedcor WHERE pedido=:pedido", 
+        return $this->db->query("SELECT * FROM detalhe WHERE pedido=:pedido", 
                 array(':pedido'=>$pid));
     } 
     /**
@@ -65,7 +65,7 @@ class DetPedCor {
      * @return type
      */
     public function insertLin($pid, $mid, $lin, $obj) {
-        $result = $this->db->query("SELECT max(linha) AS linha, count(*) AS linhas FROM detpedcor WHERE pedido=:pid AND modelo=:mid ",
+        $result = $this->db->query("SELECT max(linha) AS linha, count(*) AS linhas FROM detalhe WHERE pedido=:pid AND modelo=:mid ",
                 array(':pid'=>$pid, ':mid'=>$mid));
         $linha = 0;
         $linhas = 0; 
@@ -73,7 +73,7 @@ class DetPedCor {
             $linha = $result[0]->linha +1;
         }
         if($obj->linha=="") {
-            $this->db->queryInsert("INSERT INTO detpedcor(pedido, modelo, linha, cor1, cor2, elem1,elem2, elem3, qtys) "
+            $this->db->queryInsert("INSERT INTO detalhe(pedido, modelo, linha, cor1, cor2, elem1,elem2, elem3, qtys) "
                 . " VALUES(:pedido, :modelo, :linha, :cor1, :cor2, :elem1, :elem2, :elem3, :qtys)",
                 array(':pedido'=>$obj->pedido, ':modelo'=>$obj->modelo, ':linha'=>$linha, ':cor1'=>$obj->cor1,
                     ':cor2'=>$obj->cor2, ':elem1'=>json_encode($obj->elem1), ':elem2'=>json_encode($obj->elem2),
@@ -90,7 +90,7 @@ class DetPedCor {
      * @return type
      */
     public function update($linha, $obj) {
-        $this->db->query("UPDATE detpedcor SET cor1=:cor1, cor2=:cor2, elem1=:elem1, elem2=:elem2, elem3=:elem3, qtys=:qtys "
+        $this->db->query("UPDATE detalhe SET cor1=:cor1, cor2=:cor2, elem1=:elem1, elem2=:elem2, elem3=:elem3, qtys=:qtys "
                 . " WHERE pedido=:pid AND modelo=:mid AND linha=:linha ",
                 array(':pid'=>$obj->pedido, ':mid'=>$obj->modelo, ':linha'=>$linha,':cor1'=>$obj->cor1, ':cor2'=>$obj->cor2,
                     ':elem1'=>json_encode($obj->elem1), ':elem2'=>json_encode($obj->elem2),
@@ -100,7 +100,7 @@ class DetPedCor {
     
     
     public function deleteLine($pid, $mid, $lin) {
-        return $this->db->query("DELETE FROM detpedcor WHERE pedido=:pid AND modelo=:mid AND linha=:lin ",
+        return $this->db->query("DELETE FROM detalhe WHERE pedido=:pid AND modelo=:mid AND linha=:lin ",
                 [':pid'=>$pid, ':mid'=>$mid, ':lin'=>$lin]);
     }
 }

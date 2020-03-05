@@ -32,8 +32,9 @@ class Cor {
      * @return type
      */
     public function insert($obj) {
-        return $this->db->queryInsert("INSERT INTO cor(nome, ref) VALUES(:nome, :ref)", 
+        $this->db->queryInsert("INSERT INTO cor(nome, ref) VALUES(:nome, :ref)", 
                 array(':nome'=>$obj->nome, ':ref'=>$obj->ref));
+        return $this->db->lastInsertId();
     }
     /**
      * 

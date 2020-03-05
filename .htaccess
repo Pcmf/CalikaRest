@@ -19,17 +19,17 @@ RewriteRule ^artigos index.php?url=artigos [L,QSA]
 RewriteRule ^clientes/([0-9]+) index.php?url=clientes&id=$1 [L,QSA]
 RewriteRule ^clientes index.php?url=clientes [L,QSA]
 
-#RewriteRule ^cor/([0-9]+) index.php?url=cor&id=$1 [L,QSA]
-#RewriteRule ^cor index.php?url=cor [L,QSA]
-
-RewriteRule ^cores/([0-9]+) index.php?url=cores&id=$1 [L,QSA]
-RewriteRule ^cores index.php?url=cores [L,QSA]
+RewriteRule ^cores/([0-9]+) index.php?url=cor&id=$1 [L,QSA]
+RewriteRule ^cores index.php?url=cor [L,QSA]
 
 RewriteRule ^escalas/([0-9]+) index.php?url=escalas&id=$1 [L,QSA]
 RewriteRule ^escalas index.php?url=escalas [L,QSA]
 
-RewriteRule ^elementos/([0-9]+) index.php?url=elementos&id=$1 [L,QSA]
-RewriteRule ^elementos index.php?url=elementos [L,QSA]
+RewriteRule ^elementos/([0-9]+) index.php?url=elemento&id=$1 [L,QSA]
+RewriteRule ^elementos index.php?url=elemento [L,QSA]
+
+RewriteRule ^utilizadores/([0-9]+) index.php?url=user&id=$1 [L,QSA]
+RewriteRule ^utilizadores index.php?url=user [L,QSA]
 
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2&lin=$3 [L,QSA]
 RewriteRule ^detpedcor/([0-9]+)/([0-9]+) index.php?url=detpedcor&pid=$1&mod=$2 [L,QSA]
@@ -51,12 +51,15 @@ RewriteRule ^modelos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=modelos&pid=$1&mid
 RewriteRule ^modelos/([0-9]+) index.php?url=modelos&pid=$1 [L,QSA]
 RewriteRule ^modelos index.php?url=modelos [L,QSA]
 
+RewriteRule ^modelo/ref/([0-9a-zA-z$./\-]+) index.php?url=mref&ref=$1 [L,QSA]
+
+RewriteRule ^modelo/allimgs/([0-9]+) index.php?url=modallimgs&id=$1 [L,QSA]
 RewriteRule ^modelo/foto/ext/([0-9]+) index.php?url=modFotoExt&id=$1 [L,QSA]
 RewriteRule ^modelo/foto/([0-9]+) index.php?url=modFoto&id=$1 [L,QSA]
 RewriteRule ^modelo/([0-9]+) index.php?url=modelo&id=$1 [L,QSA]
 
 
-
+RewriteRule ^refint/([0-9]+)/([0-9]+) index.php?url=refint&cid=$1&ano=$2 [L,QSA]
 
 
 RewriteRule ^pedidos/([0-9]+)/([0-9]+)/([0-9]+) index.php?url=pedidobysts&cid=$1&ano=$2&status=$3 [L,QSA]
@@ -64,6 +67,7 @@ RewriteRule ^pedidos/([0-9]+)/([0-9]+) index.php?url=pedidos&pid=$1&ano=$2 [L,QS
 RewriteRule ^pedidos/([0-9]+) index.php?url=pedidos&cid=$1 [L,QSA]
 RewriteRule ^pedidos index.php?url=pedidos [L,QSA]
 
+RewriteRule ^pedido/foto/([0-9]+) index.php?url=pedidofoto&id=$1 [L,QSA]
 RewriteRule ^pedido/ref/([0-9]+)/([0-9]+) index.php?url=pedidoref&cid=$1&ano=$2 [L,QSA]
 RewriteRule ^pedido/([0-9]+) index.php?url=pedido&pid=$1 [L,QSA]
 

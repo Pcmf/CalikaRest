@@ -34,25 +34,27 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
             $user = new User();
             echo json_encode($user->checkUser($postBody->username, $postBody->password));
             http_response_code(200);
+            
         } elseif ($_GET['url'] == "artigos") {
             $ob = new Artigo();
-            $resp = $ob->insert($postBody);
-            if ($resp) {
-                http_response_code(304);
-            } else {
-                http_response_code(200);
-            }
-            echo json_encode($resp);
+            echo json_encode($ob->insert($postBody));
+            http_response_code(200);
+
         } elseif ($_GET['url'] == "cor") {
             $ob = new Cor();
-            $resp = $ob->insert($postBody);
-            if ($resp) {
-                echo json_encode($resp);
-                http_response_code(304);
-            } else {
-                echo json_encode($resp);
-                http_response_code(200);
-            }
+            echo json_encode($ob->insert($postBody));
+            http_response_code(200);
+
+        } elseif ($_GET['url'] == "elemento") {
+            $ob = new Elemento();
+            echo json_encode($ob->insert($postBody));
+            http_response_code(200);
+
+        } elseif ($_GET['url'] == "user") {
+            $ob = new User();
+            echo json_encode($ob->insert($postBody));
+            http_response_code(200);
+
         } elseif ($_GET['url'] == "modelos") {
             $ob = new Modelo();
             echo json_encode($ob->insert($postBody));
@@ -60,6 +62,10 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
         } elseif ($_GET['url'] == "det") {
             $ob = new Detalhe();
             echo json_encode($ob->insertLine($_GET['pid'], $_GET['mid'], $postBody));
+            http_response_code(200);
+        } elseif ($_GET['url'] == "clientes") {
+            $ob = new Cliente();
+            echo json_encode($ob->insert($postBody));
             http_response_code(200);
         } else {
             http_response_code(500);
@@ -78,7 +84,7 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
                 echo json_encode($ob->getAll());
             }
             http_response_code(200);
-        } elseif ($_GET['url'] == "users") {
+        } elseif ($_GET['url'] == "user") {
             $ob = new User();
             if (!isset($_GET['id'])) {
                 echo json_encode($ob->getAll());
@@ -94,7 +100,7 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
                 echo json_encode($ob->getOne($_GET['id']));
             }
             http_response_code(200);
-        } elseif ($_GET['url'] == "cores") {
+        } elseif ($_GET['url'] == "cor") {
             $ob = new Cor();
             if (!isset($_GET['id'])) {
                 echo json_encode($ob->getAll());
@@ -102,7 +108,7 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
                 echo json_encode($ob->getOne($_GET['id']));
             }
             http_response_code(200);
-        } elseif ($_GET['url'] == "elementos") {
+        } elseif ($_GET['url'] == "elemento") {
             $ob = new Elemento();
             if (!isset($_GET['id'])) {
                 echo json_encode($ob->getAll());
@@ -133,7 +139,7 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
             if (!isset($_GET['pid'])) {
                 echo json_encode($ob->getAll());
             } elseif (isset($_GET['lin'])) {
-                echo json_encode($ob->getOne($_GET['pid'], $_GET['mod'], $_GET['lin']));
+               // echo json_encode($ob->getOne($_GET['pid'], $_GET['mod'], $_GET['lin']));
             } else {
                 echo json_encode($ob->getPidMod($_GET['pid'], $_GET['mod']));
             }
@@ -174,6 +180,10 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
             $ob = new Modelo();
             echo json_encode($ob->getRefInterna($_GET['pid']));
             http_response_code(200);
+        } elseif ($_GET['url'] == "mref") {
+            $ob = new Modelo();
+            echo json_encode($ob->getByRefInt($_GET['ref']));
+            http_response_code(200);
         } elseif ($_GET['url'] == "mfotos") {
             $ob = new Modelo();
             if (isset($_GET['linha'])) {
@@ -190,6 +200,14 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
             $ob = new Modelo();
             echo json_encode($ob->getMimgs($_GET['pid']));
             http_response_code(200);
+        } elseif ($_GET['url'] == "modallimgs") {
+            $ob = new Modelo();
+            echo json_encode($ob->getAllImgs($_GET['id']));
+            http_response_code(200);
+        } elseif ($_GET['url'] == "refint") {
+            $ob = new Modelo();
+            echo json_encode($ob->getRefInt($_GET['cid'], $_GET['ano']));
+            http_response_code(200);
         }
 
 // PUT  pedidobysts
@@ -199,13 +217,9 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
 
         if ($_GET['url'] == "cor") {
             $ob = new Cor();
-            $resp = $ob->update($_GET['id'], $postBody);
-            if ($resp) {
-                http_response_code(304);
-            } else {
-                http_response_code(200);
-            }
-            echo json_encode($resp);
+            echo json_encode($ob->update($_GET['id'], $postBody));
+            http_response_code(200);
+
         } elseif ($_GET['url'] == "artigos") {
             $ob = new Artigo();
             $resp = $ob->update($_GET['id'], $postBody);
@@ -215,18 +229,42 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
                 http_response_code(200);
             }
             echo json_encode($resp);
+
+        } elseif ($_GET['url'] == "elemento") {
+            $ob = new Elemento();
+            echo json_encode($ob->update($_GET['id'], $postBody));
+            http_response_code(200);
+
+        } elseif ($_GET['url'] == "user") {
+            $ob = new User();
+            echo json_encode($ob->update($_GET['id'], $postBody));
+            http_response_code(200);
+
         } elseif ($_GET['url'] == "pedidos") {
             $ob = new Pedido();
             echo json_encode($ob->createPedido($_GET['cid'], $postBody));
             http_response_code(200);
+
+        } elseif ($_GET['url'] == "clientes") {
+            $ob = new Cliente();
+            echo json_encode($ob->update($_GET['id'], $postBody));
+            http_response_code(200);
+
         } elseif ($_GET['url'] == "pedido") {
             $ob = new Pedido();
             echo json_encode($ob->editPedido($_GET['pid'], $postBody));
             http_response_code(200);
+
+        } elseif ($_GET['url'] == "pedidofoto") {
+            $ob = new Pedido();
+            echo json_encode($ob->updateFoto($_GET['id'], $postBody));
+            http_response_code(200);
+
         } elseif ($_GET['url'] == "modFoto") {
             $ob = new Modelo();
             echo json_encode($ob->updateFoto($_GET['id'], $postBody));
             http_response_code(200);
+
         } elseif ($_GET['url'] == "modFotoExt") {
             $ob = new Modelo();
             echo json_encode($ob->updateFotoExt($_GET['id'], $postBody));
@@ -292,9 +330,9 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
         } elseif ($_GET['url'] == "det") {
             $ob = new Detalhe();
             if (isset($_GET['lin'])) {
-                echo json_encode($ob->deleteByLine($_GET['pid'], $_GET['mod'], $_GET['lin']));
+                echo json_encode($ob->deleteByLine($_GET['pid'], $_GET['mid'], $_GET['lin']));
             } elseif (isset($_GET['mid'])) {
-                echo json_encode($ob->deleteByModelo($_GET['pid'], $_GET['mod']));
+                echo json_encode($ob->deleteByModelo($_GET['pid'], $_GET['mid']));
             } else {
                 echo json_encode($ob->deleteByPedido($_GET['pid']));
             }
@@ -302,7 +340,7 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
         } elseif ($_GET['url'] == "detpedcor") {
             $ob = new DetPedCor();
             if (isset($_GET['lin'])) {
-                echo json_encode($ob->deleteLine($_GET['pid'], $_GET['mod'], $_GET['lin']));
+                echo json_encode($ob->deleteLine($_GET['pid'], $_GET['mid'], $_GET['lin']));
             }
         }
     } else {//Fim dos metodos 

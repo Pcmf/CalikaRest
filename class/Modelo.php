@@ -2,6 +2,7 @@
 
 require_once './db/DB.php';
 require_once 'Detalhe.php';
+require_once 'Cliente.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -17,10 +18,12 @@ class Modelo {
 
     private $db;
     private $Det; //DetPedCor
+    private $Cliente;
 
     public function __construct() {
         $this->db = new DB();
         $this->Det = new Detalhe();
+        $this->Cliente = new Cliente();
     }
     /**
      * 
@@ -67,7 +70,19 @@ class Modelo {
     }
     
     /**
-     * Obter modelos com todas as imagens
+     * refInterna
+     */
+    public function getByRefInt($refInt) {
+        return $this->db->query("SELECT M.*, P.tema, A.nome "
+                        . " FROM modelo M "
+                        . " INNER JOIN pedido P ON P.id=M.pedido AND P.ano=M.ano "
+                        . " INNER JOIN artigo A ON A.id=M.artigo "
+                        . " WHERE M.refinterna=:refint",
+                        [':refint'=>$refInt]);        
+    }
+
+    /**
+     * Obter modelos com todas as imagens     getByRefInt
      * @param type $pid
      * @return array
      */
@@ -86,6 +101,40 @@ class Modelo {
         }
         return $modelos;
     }
+
+    /**
+     * Obter os dados e imagens de um modelo
+     */
+    public function getAllImgs($mid){
+        $modelos = array();
+        $result = $this->db->query("SELECT M.*, A.nome "
+                        . " FROM modelo M "
+                        . " LEFT JOIN artigo A ON A.id=M.artigo "
+                        . " WHERE M.id=:id", array(':id' => $mid));
+        foreach ($result as $modelo) {
+            $temp = array();
+            $temp['modelo'] = $modelo;
+            $temp['imgs'] = $this->getFotosByModelo($modelo->id);
+            $temp['dpc'] = $this->Det->getByPidMid($modelo->pedido, $modelo->id);
+            array_push($modelos, $temp);
+        }
+        return $modelos;
+    }        
+    
+
+    public function getRefInt($cid, $ano)
+    {
+        $prefix = $this->Cliente->getPrefix($cid);
+        $result = $this->db->query("SELECT MAX(SUBSTR(M.refinterna,LENGTH((SELECT codigo FROM cliente WHERE id=:cid))+1))+1 as maxlinha "
+        ." FROM pedido P INNER JOIN modelo M ON M.pedido = P.id WHERE P.clienteId=:cid AND P.ano=:ano",
+        [':cid'=>$cid, ':ano'=>$ano]);
+        if($result[0]->maxlinha) {
+            return $prefix.$result[0]->maxlinha;
+        } else {
+            
+            return $prefix.substr($ano,2).'001';
+        }
+    }
     
     /**
      * 
@@ -99,6 +148,7 @@ class Modelo {
         !isset($form->preview) ? $form->preview = '' : null;
         !isset($form->descricao) ? $form->descricao = '' : null;
         !isset($form->preco) ? $form->preco = 0 : null;
+        !isset($obj->foto) ? $obj->foto = '' : null;
         try{
             $result = $this->db->queryInsert("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
                 . " VALUES(:ano,:refinterna,:refcliente,:pedido,:artigo,:foto,:descricao,:preco, :escala)",
@@ -289,6 +339,8 @@ class Modelo {
             return $this->db->query("UPDATE modelo SET foto=:foto WHERE id=:id", 
                     [':id'=>$id, ':foto'=>$foto]);
         }
+
+
         public function updateFotoExt($id, $foto){
             $linha = $this->getFotoLinha($id);
             try {

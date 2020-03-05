@@ -54,7 +54,18 @@ class User {
     }
     
     
-    
+    public function insert($obj) {
+        $this->db->queryInsert("INSERT INTO users(nome, username, password, type) "
+        ." VALUES(:nome, :username, :password, :type) ",
+        [':nome'=>$obj->nome, ':username'=>$obj->username, ':password'=>$obj->password, ':type'=>$obj->type]);
+        return $this->db->lastInsertId();
+    }
+
+    public function update($id, $obj) {
+        return $this->db->query("UPDATE users SET nome=:nome, username=:username, password=:password, type=:type"
+        ." WHERE id=:id", 
+        [':nome'=>$obj->nome, ':username'=>$obj->username, ':password'=>$obj->password, ':type'=>$obj->type, ':id'=>$id]);
+    }
 
     //Functions
     //Check token and return user ID or false

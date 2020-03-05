@@ -70,14 +70,15 @@ class Pedido {
      * @return type
      */
     public function createPedido($cid, $obj) {
+        !isset($obj->refInterna) ? $obj->refInterna='' : null;
         !isset($obj->refcliente) ? $obj->refcliente='' : null;
         !isset($obj->descricao) ? $obj->descricao='' : null;
         try {
             $this->db->queryInsert("INSERT INTO pedido(clienteId, ano, refInterna, refCliente, tema, descricao, foto, datapedido, situacao) "
                         . " VALUES(:clienteId, :ano, :refInterna, :refCliente, :tema, :descricao, :foto, NOW(), 1)",
                             [':clienteId'=>$cid, ':ano'=>$obj->anoTema, ':refCliente'=>$obj->refCliente, 
-                             ':refInterna'=>$this->getRefInterna($cid, $obj->anoTema),
-                             ':tema'=>$obj->tema, ':descricao'=>$obj->descricao , ':foto'=>$obj->foto]);
+                             ':refInterna'=>$obj->refInterna,':tema'=>$obj->tema, ':descricao'=>$obj->descricao ,
+                              ':foto'=>$obj->foto]);
             return $this->db->lastInsertId();
             
         } catch (Exception $exc) {
@@ -85,7 +86,9 @@ class Pedido {
         }
     }
     
-    
+    /**
+     * 
+     */
     public function editPedido($pid, $obj) {
         $obj = $this->checkObjFields($pid, $obj);
         return $this->db->query("UPDATE pedido SET clienteId=:clienteId, ano=:ano, refInterna=:refInterna,"
@@ -94,6 +97,11 @@ class Pedido {
                  ':refCliente'=>$obj->refCliente, ':tema'=>$obj->tema, ':descricao'=>$obj->descricao,
                  ':foto'=>$obj->foto, ':situacao'=>$obj->situacao , ':pid'=>$pid]);
         
+    }
+
+    public function updateFoto($pid, $obj){
+        return $this->db->query("UPDATE pedido SET foto=:foto WHERE id=:pid",
+        [':pid'=>$pid, ':foto'=>$obj]);
     }
     
     public function deletePedido($pid) {
