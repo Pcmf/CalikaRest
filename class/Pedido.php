@@ -24,6 +24,45 @@ class Pedido {
         $this->Modelo = new Modelo();
         
     }
+
+    /**
+     * @description get grouped by client/status
+     * @return array 
+     */
+    public function getByStatusAllClients(){
+        return $this->db->query("SELECT DISTINCT P.situacao AS status, C.nome AS name, C.id AS clienteId, count(P.situacao) AS qty "
+        . " FROM pedido P LEFT JOIN cliente C ON C.id = P.clienteId GROUP BY P.situacao, C.nome ORDER BY C.nome, P.situacao");
+    }
+
+        /**
+     * 
+     * @param type $cid
+     * @param type $status
+     * @return order []
+     */
+    public function getOrdersByClientStatus($cid, $status) {
+        return $this->db->query("SELECT P.*, C.nome AS nomeCliente, S.situacao AS nomeSituacao "
+                . " FROM pedido P"
+                . " INNER JOIN cliente C ON C.id=P.clienteId "
+                . " INNER JOIN situacao S ON S.id=P.situacao"
+                . " WHERE P.clienteId=:cid AND P.situacao=:status",
+                array(':cid'=>$cid, ':status'=>$status));
+    }
+
+            /**
+     * 
+     * @param type $status
+     * @return order []
+     */
+    public function getOrdersByStatus($status) {
+        return $this->db->query("SELECT P.*, C.nome AS nomeCliente, S.situacao AS nomeSituacao "
+                . " FROM pedido P"
+                . " INNER JOIN cliente C ON C.id=P.clienteId "
+                . " INNER JOIN situacao S ON S.id=P.situacao"
+                . " WHERE P.situacao=:status",
+                array(':status'=>$status));
+    }
+
     /**
      * 
      * @return type
@@ -33,6 +72,17 @@ class Pedido {
                 . " FROM pedido P"
                 . " INNER JOIN cliente C ON C.id=P.clienteId "
                 . " INNER JOIN situacao S ON S.id=P.situacao");
+    }
+
+    /**
+     * @description get all pedidos by client id
+     * @return type
+     */
+    public function getAllByClientId($cid) {
+        return $this->db->query("SELECT P.* "
+                . " FROM pedido P"
+                . " WHERE P.clienteId=:cid",
+                array(':cid'=>$cid));
     }
     /**
      * 

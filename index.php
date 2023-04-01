@@ -20,9 +20,9 @@ function checkToken($token) {
 }
 
 $headers = apache_request_headers();
-if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
+/* if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
     http_response_code(401);
-} else {
+} else { */
 
 
 //POSTS
@@ -156,9 +156,17 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
             $ob = new Modelo();
             echo json_encode($ob->getById($_GET['id']));
             http_response_code(200);
+        } elseif ($_GET['url'] == "orderslist") {
+            $ob = new Pedido();
+            echo json_encode($ob->getByStatusAllClients());
+            http_response_code(200);
         } elseif ($_GET['url'] == "pedidos") {
             $ob = new Pedido();
-            echo json_encode($ob->getAll());
+            if(isset($_GET['cid'])) {
+                echo json_encode($ob->getAllByClientId($_GET['cid']));
+            } else {
+                echo json_encode($ob->getAll());
+            }
             http_response_code(200);
         } elseif ($_GET['url'] == "pedidobysts") {
             $ob = new Pedido();
@@ -172,10 +180,10 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
             $ob = new Pedido();
             echo json_encode($ob->getOne($_GET['pid']));
             http_response_code(200);
-        } elseif ($_GET['url'] == "pedidosbysts") {
+/*         } elseif ($_GET['url'] == "pedidosbysts") {
             $ob = new Pedido();
             echo json_encode($ob->getByCltYearSts($_GET['cid'], $_GET['ano'], $_GET['status']));
-            http_response_code(200);
+            http_response_code(200); */
         } elseif ($_GET['url'] == "ref") {
             $ob = new Modelo();
             echo json_encode($ob->getRefInterna($_GET['pid']));
@@ -207,6 +215,14 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
         } elseif ($_GET['url'] == "refint") {
             $ob = new Modelo();
             echo json_encode($ob->getRefInt($_GET['cid'], $_GET['ano']));
+            http_response_code(200);
+        } elseif ($_GET['url'] == 'ordersclientstatus') {
+            $ob = new Pedido();
+            echo json_encode($ob->getOrdersByClientStatus($_GET['cid'], $_GET['status']));
+            http_response_code(200);
+        } elseif ($_GET['url'] == 'ordersstatus') {
+            $ob = new Pedido();
+            echo json_encode($ob->getOrdersByStatus( $_GET['status']));
             http_response_code(200);
         }
 
@@ -346,4 +362,4 @@ if ($_GET['url'] != "auth" && checkToken($headers['token']) == 0) {
     } else {//Fim dos metodos 
         http_response_code(405);
     }
-}
+// }

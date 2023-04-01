@@ -5,6 +5,6 @@
  */
 
 define('host','localhost');
-define('database','calika');
+define('database','calikaba_calika_b');
 define('username', 'root');
 define('password', '');
