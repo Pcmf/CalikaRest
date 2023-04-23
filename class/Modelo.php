@@ -152,7 +152,7 @@ class Modelo {
         try{
             $result = $this->db->queryInsert("INSERT INTO modelo(ano,refinterna,refcliente,pedido,artigo,foto,descricao,preco,escala) "
                 . " VALUES(:ano,:refinterna,:refcliente,:pedido,:artigo,:foto,:descricao,:preco, :escala)",
-                [':ano' => $pedido->ano, ':refinterna' => $form->refInterna, ':refcliente' => $form->refCliente,
+                [':ano' => $form->ano, ':refinterna' => $form->refInterna, ':refcliente' => $form->refCliente,
                     ':pedido' => $pedido->id, ':artigo' => $form->artigo, ':foto' => $obj->foto,
                     ':descricao' => $form->descricao, ':preco' => $form->preco, ':escala' => $form->escala]);
             return $this->db->lastInsertId();

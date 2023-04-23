@@ -224,6 +224,10 @@ $headers = apache_request_headers();
             $ob = new Pedido();
             echo json_encode($ob->getOrdersByStatus( $_GET['status']));
             http_response_code(200);
+        } elseif ($_GET['url'] == 'search') {
+            $ob = new Pedido();
+            echo json_encode($ob->getOrdersBySearch( $_GET['value']));
+            http_response_code(200);
         }
 
 // PUT  pedidobysts

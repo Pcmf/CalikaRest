@@ -65,6 +65,20 @@ class Pedido {
 
     /**
      * 
+     * @param type $value
+     * @return order []
+     */
+    public function getOrdersBySearch($value) {
+        return $this->db->query("SELECT P.*, C.nome AS nomeCliente, S.situacao AS nomeSituacao "
+                . " FROM pedido P"
+                . " INNER JOIN cliente C ON C.id=P.clienteId "
+                . " INNER JOIN situacao S ON S.id=P.situacao"
+                . " WHERE P.refInterna LIKE :refi OR P.refCliente LIKE :refc OR P.tema LIKE :tema",
+                array(':refi'=>$value.'%', ':refc'=>$value.'%', ':tema'=>'%'.$value.'%'));
+    }
+
+    /**
+     * 
      * @return type
      */
     public function getAll() {
